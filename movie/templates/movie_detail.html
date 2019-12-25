@@ -4,92 +4,137 @@
 
 {% block content %}
 
-<div class="hero mv-single-hero">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<!-- <h1> movie listing - list</h1>
-				<ul class="breadcumb">
-					<li class="active"><a href="#">Home</a></li>
-					<li> <span class="ion-ios-arrow-right"></span> movie listing</li>
-				</ul> -->
-			</div>
-		</div>
-	</div>
-</div>
-<div class="page-single movie-single movie_single">
-	<div class="container">
-		<div class="row ipad-width2">
-			<div class="col-md-4 col-sm-12 col-xs-12">
-				<div class="movie-img">
-{#				<div class="movie-img sticky-sb">#}
-					<img src="{{ object.image.url }}" alt="">
+    <div class="hero mv-single-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- <h1> movie listing - list</h1>
+                    <ul class="breadcumb">
+                        <li class="active"><a href="#">Home</a></li>
+                        <li> <span class="ion-ios-arrow-right"></span> movie listing</li>
+                    </ul> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-single movie-single movie_single">
+        <div class="container">
+            <div class="row ipad-width2">
+                <div class="col-md-4 col-sm-12 col-xs-12">
+                    <div class="movie-img">
+                        {#				<div class="movie-img sticky-sb">#}
+                        <img src="{{ object.image.url }}" alt="">
+                    </div>
+                </div>
+                <div class="col-md-8 col-sm-12 col-xs-12">
+                    <div class="movie-single-ct main-content">
+                        <h1 class="bd-hd">{{ object.title }}
+                            <span>{{ object.year }}</span></h1>
+
+                        <div class="movie-rate">
+                            {#						<div class="rate">#}
+                            {#							<i class="ion-android-star"></i>#}
+                            {#							<p><span>8.1</span> /10<br>#}
+                            {#							</p>#}
+                            {#						</div>#}
+                            <div>
+                                <p>Rate This Movie: </p>
+                                {% ratings object %}
+                            </div>
+                        </div>
+                        <table class="b-post__info">
+                            <tbody>
+                            <tr>
+                                <td class="l"><h2>Рейтинги</h2>:</td>
+                                <td><span class="b-post__info_rates imdb">IMDb: <span
+                                        class="bold">{{ object.imdb }}</span></span>
+                                    <span class="b-post__info_rates kp">Кинопоиск: <span
+                                            class="bold">{{ object.kinopoisk }}</span></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="l"><h2>Дата выхода</h2>:</td>
+                                <td>{{ object.year }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="l"><h2>Страна</h2>:</td>
+                                <td>{% for country in movie.countries.all %}
+                                    {{ country }}{% endfor %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="l"><h2>Режиссер</h2>:</td>
+                                <td>
+                                    <div class="persons-list-holder"><span
+                                            class="item"><span
+                                            class="person-name-item tooltipstered"><span
+                                            itemprop="name">{{ object.director }}</span></span></span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="l"><h2>Жанр</h2>:</td>
+                                <td>{% for genre in movie.genres.all %}
+                                    <span itemprop="genre"> {{ genre }}</span>{% endfor %}
+                            </tr>
+                            <tr>
+                                <td class="l"><h2>Время</h2>:</td>
+                                <td itemprop="duration">{{ object.runtime }}
+                                    мин.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="l"><h2>Смотреть</h2>:</td>
+                                <td itemprop="duration"><p><a class="fancybox-media hvr-grow"
+                                        href="{{ object.video1 }}">Линк</a></p>
+                                    {% if object.video2 %}
+                                        <p>
+                                            <a class="fancybox-media hvr-grow" href="{{ object.video2 }}">Линк</a>
+                                        </p>
+
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="persons-list-holder"><span
+                                            class="l inline"><h2>В ролях актеры</h2>: </span>
+                                        {% for actor in movie.actors.all %}
+                                            <span class="item"><span
+                                                    itemprop="name">{{ actor }}</span>,</span>
+                                        {% endfor %}
+                                        <span class="item">и другие</span></div>
+                                </td>
+                            </tr>
+                            {% if object.trailer %}
+                                <tr>
+                                    <td class="l">Трейлер:</td>
+                                    <td>
+                                        <div class="vd-it">
+                                            {#                                        <img class="vd-img"#}
+                                            {#                                             src="{% static 'images/uploads/image4.jpg' %}"#}
+                                            {#                                             alt="">#}
+                                            <a class="fancybox-media hvr-grow"
+                                               href="{{ object.trailer }}"><img
+                                                    src="{% static 'images/uploads/play-vd.png' %}"
+                                                    alt=""> Смотреть</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
 				</div>
 			</div>
-			<div class="col-md-8 col-sm-12 col-xs-12">
-				<div class="movie-single-ct main-content">
-					<h1 class="bd-hd">{{ object.title }} <span>{{ object.year }}</span></h1>
-
-					<div class="movie-rate">
-{#						<div class="rate">#}
-{#							<i class="ion-android-star"></i>#}
-{#							<p><span>8.1</span> /10<br>#}
-{#							</p>#}
-{#						</div>#}
-						<div>
-							<p>Rate This Movie:  </p>
-                            {% ratings object %}
-						</div>
-					</div>
-					<div class="movie-tabs">
-						<div class="tabs">
-						    <div class="tab-content">
-						        <div id="overview" class="tab active">
-						            <div class="row">
-						            	<div class="col-md-8 col-sm-12 col-xs-12">
-                                            <p>{{ object.runtime }} m.</p>
-						            		<p>Genre: {% for genre in movie.genres.all %} {{ genre }}{% endfor %}</p>
-						            		<p>Country: {% for country in movie.countries.all %} {{ country }}{% endfor %}.</p>
-						            		<div class="title-hd-sm">
-												<h4>Trailer</h4>
-											</div>
-											<div class="mvsingle-item ov-item">
-												<div class="vd-it">
-													<img class="vd-img" src="{% static 'images/uploads/image4.jpg' %}" alt="">
-													<a class="fancybox-media hvr-grow" href="{{ object.trailer }}"><img src="{% static 'images/uploads/play-vd.png' %}" alt=""></a>
-												</div>
-											</div>
-											<div class="title-hd-sm">
-												<h4>cast</h4>
-											</div>
-											<!-- movie cast -->
-											<div class="mvcast-item">
-
-												<div class="cast-it">
-													<div class="cast-left">
-{#														<img src="images/uploads/cast1.jpg" alt="">#}
-                                                        {% for actor in movie.actors.all %}
-														<a href="movie_detail.html#">{{ actor }}</a>
-                                                        {% endfor %}
-													</div>
-{#													<p>...  Robert Downey Jr.</p>#}
-												</div>
-											</div>
-						            	</div>
-						            </div>
-						        </div>
-						    </div>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
 		<div class="row ipad-width2">
-			<div class="col-md-8 col-sm-12 col-xs-12">
+			<div class="col-md-8 col-sm-12 col-xs-12 plot">
                 <h3>Описание:</h3>
 				<p>{{ object.plot }}</p>
 			</div>
 		</div>
 	</div>
 </div>
+
 {% endblock %}

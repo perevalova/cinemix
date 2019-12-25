@@ -31,6 +31,77 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
+
+
+.b-post {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.b-post__info {
+  color: #abb7c4;
+  width: 100%
+}
+
+.b-post__info td {
+  padding: 2px 0;
+  vertical-align: top;
+  text-align: left
+}
+
+.b-post__info .l {
+  color: #ffffff;
+  font-weight: bold;
+  width: 130px;
+}
+
+.b-post__info .l.inline {
+  display: inline-block
+}
+
+.b-post__info .rd {
+  padding-bottom: 15px;
+  font-size: 12px
+}
+
+.b-post__info a {
+  color: #00a0b0;
+  /*text-decoration: underline*/
+}
+
+.b-post__info a:hover {
+  text-decoration: none
+}
+
+.b-post__info h2 {
+  display: inline
+}
+
+.b-post__info_rates {
+  color: #000;
+  display: inline-block;
+  float: left;
+  margin-right: 15px;
+  margin-bottom: 7px;
+  white-space: nowrap
+}
+
+.b-post__info_rates a {
+  color: #000
+}
+
+.b-post__info_rates i {
+  color: #777;
+  font-style: normal
+}
+
+.b-post__info_rates:nth-child(2) {
+  margin-right: 0
+}
+
+
+
+
 @media print {
   *,
   *:before,
@@ -3867,12 +3938,7 @@ dt {
 dd {
   margin-bottom: 1.6em;
 }
-table,
-th,
-td {
-  border: 1px solid #eaeaea;
-  border: 1px solid rgba(51, 51, 51, 0.1);
-}
+
 table {
   border-collapse: separate;
   border-spacing: 0;
@@ -6000,7 +6066,7 @@ ul {
   justify-content: flex-start;
   border-top: 1px solid #405266;
   border-bottom: 1px solid #405266;
-  margin-bottom: 70px;
+  margin-bottom: 10px;
 }
 @media (max-width: 767px) {
   .movie-single .movie-single-ct .movie-rate {
@@ -6372,7 +6438,7 @@ ul {
   margin-left: 30px;
 }
 .movie-single p a {
-  color: #4280bf;
+  /*color: #4280bf;*/
 }
 .movie-single p a:hover {
   color: #dcf836;
@@ -7910,4 +7976,94 @@ footer.full-width-ft .ft-copyright {
   color: #8c9296;
   font-family: 'Dosis', sans-serif;
   font-weight: 700;
+}
+
+
+/* Custom */
+
+
+.b-post {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.b-post__info {
+  color: #abb7c4;
+  width: 100%;
+  font-size: 100%;
+
+}
+
+.b-post__info td {
+  padding: 2px 0;
+  vertical-align: top;
+  text-align: left
+}
+
+.b-post__info .l {
+  color: #ffffff;
+  font-weight: bold;
+  width: 130px;
+}
+
+.b-post__info .l.inline {
+  display: inline-block
+}
+
+.b-post__info .rd {
+  padding-bottom: 15px;
+  font-size: 12px
+}
+
+.b-post__info a {
+  color: #00a0b0;
+  /*text-decoration: underline*/
+}
+
+.b-post__info a:hover {
+  text-decoration: none
+}
+
+.b-post__info h2 {
+  display: inline;
+  font-size: 14px;
+}
+
+.b-post__info_rates {
+  color: #abb7c4;
+  display: inline-block;
+  float: left;
+  margin-right: 15px;
+  margin-bottom: 7px;
+  white-space: nowrap
+}
+
+.b-post__info_rates a {
+  color: #000
+}
+
+.b-post__info_rates i {
+  color: #777;
+  font-style: normal
+}
+
+.b-post__info_rates:nth-child(2) {
+  margin-right: 0
+}
+
+.plot h3 {
+  font-family: 'Dosis', sans-serif;
+  font-size: 30px;
+  color: #ffffff;
+  font-weight: 700;
+  text-transform: none;
+  margin-bottom: 25px;
+}
+.plot p {
+  font-family: 'Nunito', sans-serif;
+  font-size: 17px;
+  color: #abb7c4;
+  font-weight: 300;
+  text-transform: none;
+  line-height: 24px !important;
 }
