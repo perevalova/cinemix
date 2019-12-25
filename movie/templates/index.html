@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+{% block content %}
+
+    <div class="slider movie-items">
+        <div class="container">
+            <div class="row">
+                <div class="slick-multiItemSlider">
+                    {% for movie in movies %}
+{#                    {% for rating in ratings %}#}
+                        <div class="movie-item">
+                            <div class="mv-img">
+                                <a href="index.html#"><img src="{{ movie.image.url }}" alt="" width="" height="390.88"></a>
+                            </div>
+                            <div class="title-in">
+                                {#	    				<div class="cate">#}
+                                {#	    					<span class="blue"><a href="{% url 'movie:category' slug %}">Sci-fi</a></span>#}
+                                {#	    				</div>#}
+                                <h6>
+                                    <a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a>
+                                </h6>
+{#                                <p><i class="ion-android-star"></i><span></span>#}
+{#                                    /10</p>#}
+                            </div>
+                        </div>
+                    {% endfor %}
+{#                    {% endfor %}#}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

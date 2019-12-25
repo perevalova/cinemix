@@ -1,0 +1,93 @@
+{% load static from staticfiles %}
+
+{% block header %}
+    <header class="ht-header">
+        <div class="container">
+            <nav class="navbar navbar-default navbar-custom">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header logo">
+                    <div class="navbar-toggle" data-toggle="collapse"
+                         data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <div id="nav-icon1">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <a href="{% url 'movie:home' %}"><img class="logo"
+                                              src="{% static 'images/logo_transparent3.png' %}" alt=""
+                                              width="140" height="58"></a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse flex-parent"
+                     id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav flex-child-menu menu-left">
+                        <li class="hidden">
+                            <a href="{% url 'movie:home' %}#page-top"></a>
+                        </li>
+                        <li class="dropdown first">
+                            <a class="btn btn-default dropdown-toggle lv1"
+                               data-toggle="dropdown" data-hover="dropdown">
+                                films<i class="fa fa-angle-down"
+                                         aria-hidden="true"></i>
+                            </a>
+                            <ul class="dropdown-menu level1">
+                                {% for film in FILMS %}
+                                <li><a href="{% url 'movie:category' 'films' film.slug %}">{{ film.title }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li class="dropdown first">
+                            <a class="btn btn-default dropdown-toggle lv1"
+                               data-toggle="dropdown" data-hover="dropdown">
+                                cartoons <i class="fa fa-angle-down"
+                                        aria-hidden="true"></i>
+                            </a>
+                            <ul class="dropdown-menu level1">
+                                {% for cartoon in CARTOONS %}
+                                <li><a href="{% url 'movie:category' 'cartoons' cartoon.slug %}">{{ cartoon.title }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li class="dropdown first">
+                            <a class="btn btn-default dropdown-toggle lv1"
+                               data-toggle="dropdown" data-hover="dropdown">
+                                serials <i class="fa fa-angle-down"
+                                           aria-hidden="true"></i>
+                            </a>
+                            <ul class="dropdown-menu level1">
+                                {% for serial in SERIALS %}
+                                <li><a href="{% url 'movie:category' 'serials' serial.slug %}">{{ serial.title }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li class="dropdown first">
+                            <a class="btn btn-default dropdown-toggle lv1"
+                               data-toggle="dropdown" data-hover="dropdown">
+                                animation <i class="fa fa-angle-down"
+                                           aria-hidden="true"></i>
+                            </a>
+                            <ul class="dropdown-menu level1">
+                                {% for animation in ANIMATIONS %}
+                                <li><a href="{% url 'movie:category' 'animation' animation.slug %}">{{ animation.title }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+{#                        <li><a href="{% url 'movie:random' %}">random</a></li>#}
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- top search form -->
+            <div class="top-search">
+                <input type="text"
+                       placeholder="Search for a movie">
+            </div>
+        </div>
+    </header>
+
+
+{% endblock %}

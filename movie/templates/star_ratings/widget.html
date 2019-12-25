@@ -1,0 +1,12 @@
+{% extends "star_ratings/widget_base.html" %}
+{% block rating_detail %}
+    {% block rating_average %}
+        <div class="rate">
+            <i class="ion-android-star"></i>
+            <span>{{ rating.average|floatformat:"-2" }}</span> /10<br>
+
+        </div>
+{#        <span>Average: <span#}
+{#                class='star-ratings-rating-value'>{{ rating.average|floatformat:"-2" }}</span></span>#}
+    {% endblock rating_average %}
+{% endblock rating_detail %}
