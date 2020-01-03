@@ -1,3 +1,5 @@
+from django.contrib.contenttypes.models import ContentType
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 
 from django.views.generic import DetailView, ListView
@@ -25,38 +27,67 @@ class MainPage(TemplateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        movies = Movie.objects.all()[:8]
-        # movie_id = []
-        # for movie in movies:
-        #     movie_id.append(movie.id)
-        context['movies'] = movies
-        # ratings = []
-        # rating = Rating.objects.all()
-        # for rate in movie_id:
-        #     from django.core.exceptions import ObjectDoesNotExist
-        #     try:
-        #         ratings.append(rating.get(object_id=rate))
-        #     except Exception as e:
-        #         import sys
-        #         print(e, type(e), sys.exc_info()[-1].tb_lineno)
-        # context['ratings'] = ratings
+        # movies_query = Movie.objects.all()
+        context['movies'] = Movie.objects.all()[:8]
 
         return context
 
 
-class CategoryView(ListView):
+class MovieList(ListView):
     template_name = 'movie_list.html'
     model = Movie
+    paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        movies = Movie.objects.filter(type__slug=self.kwargs['type'], categories__slug=self.kwargs['category'])
+        movies_list = Movie.objects.filter(type__slug=self.kwargs['type'], categories__slug=self.kwargs['category'])
+        order_by = self.request.GET.get('order_by', '')
+        if order_by == 'newest':
+            movies_list = movies_list.order_by('-year')
+        elif order_by == 'oldest':
+            movies_list = movies_list.order_by('year')
+
         movie_type = self.kwargs['type']
         movie_category = self.kwargs['category']
+
+
+        paginator = Paginator(movies_list, self.paginate_by)
+
+        page = self.request.GET.get('page')
+
+        try:
+            movies = paginator.page(page)
+        except PageNotAnInteger:
+            movies = paginator.page(1)
+        except EmptyPage:
+            movies = paginator.page(paginator.num_pages)
+
         context = {
             'movies': movies,
             'type': movie_type,
             'category': movie_category,
+        }
+
+        return context
+
+
+class SearchView(ListView):
+    template_name = 'search.html'
+    model = Movie
+    paginate_by = 10
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        search_movie = self.request.GET.get('q', '')
+        if search_movie:
+            movies = Movie.objects.filter(title__icontains=search_movie)
+
+        # apply pagination, 10 students per page
+        # context = paginate(movies, 10, self.request, context)
+
+        context = {
+            'movies': movies
         }
 
         return context
