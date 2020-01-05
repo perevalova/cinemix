@@ -7,10 +7,10 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="hero-ct">
-					<h1> All {{ type }} - list</h1>
+					<h1> {{ category|title }} - list</h1>
 					<ul class="breadcumb">
 						<li class="active"><a href="{% url 'movie:home' %}">Home</a></li>
-						<li> <span class="ion-ios-arrow-right"></span> All {{ type }}</li>
+						<li> <span class="ion-ios-arrow-right"></span> {{ category|title }}</li>
 					</ul>
 				</div>
 			</div>
@@ -24,7 +24,7 @@
 				<div class="sidebar">
 					<div class="searh-form">
 						<h4 class="sb-title">Search for movie</h4>
-						<form class="form-style-1" action="{% url 'movie:list' type %}" method="get">
+						<form class="form-style-1" action="{% url 'movie:list_category' type category %}" method="get">
 							<div class="row">
 {#								<div class="col-md-12 form-it">#}
 {#									<label>Movie name</label>#}
@@ -57,28 +57,12 @@
 								<div class="col-md-12 form-it">
 									<label>Release Year</label>
 									<div class="row">
-{#										<div class="col-md-6">#}
-{#											<select>#}
-{#												<option value="range">From</option>#}
-{#												<option value="number">10</option>#}
-{#												<option value="number">20</option>#}
-{#												<option value="number">30</option>#}
-{#											</select>#}
-{#										</div>#}
 										<div class="col-md-6">
                                             <input type="number" name="year_from" min="1900" max="{% now 'Y' %}" placeholder="From">
 										</div>
 										<div class="col-md-6">
                                             <input type="number" name="year_to" min="1900" max="{% now 'Y' %}" placeholder="To">
 										</div>
-{#										<div class="col-md-6">#}
-{#											<select>#}
-{#												<option value="range">To</option>#}
-{#												<option value="number">20</option>#}
-{#												<option value="number">30</option>#}
-{#												<option value="number">40</option>#}
-{#											</select>#}
-{#										</div>#}
 									</div>
 								</div>
 								<div class="col-md-12 ">
@@ -94,8 +78,8 @@
 					<p>Found <span>{{ movie_amount }}</span> in total</p>
 					<label>Sort by:</label>
                     <span>
-                        <a href="{% url 'movie:list' type %}?page={{ movies.number }}&amp;order_by=newest">Новее</a> |
-                        <a href="{% url 'movie:list' type %}?page={{ movies.number }}&amp;order_by=oldest">Старее</a>
+                        <a href="{% url 'movie:list_category' type category %}?page={{ movies.number }}&amp;order_by=newest">Новее</a> |
+                        <a href="{% url 'movie:list_category' type category %}?page={{ movies.number }}&amp;order_by=oldest">Старее</a>
                     </span>
 {#					<a href="movie_list.html" class="list"><i class="ion-ios-list-outline active"></i></a>#}
 {#					<a  href="movie_grid.html" class="grid"><i class="ion-grid"></i></a>#}

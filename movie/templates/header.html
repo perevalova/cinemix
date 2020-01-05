@@ -33,8 +33,9 @@
                                          aria-hidden="true"></i>
                             </a>
                             <ul class="dropdown-menu level1">
+                                <li><a href="{% url 'movie:list' 'films' %}">Все фильмы</a></li>
                                 {% for film in FILMS %}
-                                <li><a href="{% url 'movie:category' 'films' film.slug %}">{{ film.title }}</a>
+                                <li><a href="{% url 'movie:list_category' 'films' film.slug %}">{{ film.title }}</a>
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -46,8 +47,9 @@
                                         aria-hidden="true"></i>
                             </a>
                             <ul class="dropdown-menu level1">
+                                <li><a href="{% url 'movie:list' 'cartoons' %}">Все мультфильмы</a></li>
                                 {% for cartoon in CARTOONS %}
-                                <li><a href="{% url 'movie:category' 'cartoons' cartoon.slug %}">{{ cartoon.title }}</a>
+                                <li><a href="{% url 'movie:list_category' 'cartoons' cartoon.slug %}">{{ cartoon.title }}</a>
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -59,8 +61,9 @@
                                            aria-hidden="true"></i>
                             </a>
                             <ul class="dropdown-menu level1">
+                                <li><a href="{% url 'movie:list' 'serials' %}">Все сериалы</a></li>
                                 {% for serial in SERIALS %}
-                                <li><a href="{% url 'movie:category' 'serials' serial.slug %}">{{ serial.title }}</a></li>
+                                <li><a href="{% url 'movie:list_category' 'serials' serial.slug %}">{{ serial.title }}</a></li>
                                 {% endfor %}
                             </ul>
                         </li>
@@ -71,8 +74,9 @@
                                            aria-hidden="true"></i>
                             </a>
                             <ul class="dropdown-menu level1">
+                                <li><a href="{% url 'movie:list' 'animation' %}">Все аниме</a></li>
                                 {% for animation in ANIMATIONS %}
-                                <li><a href="{% url 'movie:category' 'animation' animation.slug %}">{{ animation.title }}</a></li>
+                                <li><a href="{% url 'movie:list_category' 'animation' animation.slug %}">{{ animation.title }}</a></li>
                                 {% endfor %}
                             </ul>
                         </li>
@@ -83,8 +87,17 @@
 
             <!-- top search form -->
             <div class="top-search">
-                <input type="text"
-                       placeholder="Search for a movie">
+                <form action="{% url 'movie:search' %}"
+                      method="get">
+{#                    <div class="form-group">#}
+                        <input type="text"
+                               placeholder="Search for a movie" name="q">
+{#                    </div>#}
+{#                    <button type="submit" class="btn btn-default">Search#}
+{#                    </button>#}
+                </form>
+{#                <input type="text"#}
+{#                       placeholder="Search for a movie">#}
             </div>
         </div>
     </header>
