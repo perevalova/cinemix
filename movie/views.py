@@ -1,3 +1,5 @@
+import random
+
 from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
@@ -154,3 +156,21 @@ class SearchView(ListView):
         }
 
         return context
+
+
+class RandomMovie(View):
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'random_movie.html')
+
+
+    def post(self, request, *args, **kwargs):
+        if self.request.POST.get('random', ''):
+            from django.db.models import Max
+            max_id = Movie.objects.all().aggregate(max_id=Max("id"))['max_id']
+            while True:
+                pk = random.randint(1, max_id)
+                movie = Movie.objects.filter(pk=pk).first()
+                if movie:
+                    return render(request, 'random_movie.html',
+                                  {'object': movie})

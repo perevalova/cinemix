@@ -8063,3 +8063,41 @@ footer.full-width-ft .ft-copyright {
 .searching {
   justify-content: center;
 }
+
+/* Random */
+
+.form-random button.submit {
+  font-family: 'Dosis', sans-serif;
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: #dd003f;
+  width: 235px;
+  height: 50px;
+  border: none;
+  border-radius: 3px;
+  margin-top: 40px;
+}
+
+#movie-random {
+  margin-top: -185px;
+}
+
+.random-con {
+  margin-top: 40px;
+}
+
+#hero-random {
+  height: 582px;
+}
+
+.random-object-1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.random-object-2 {
+  margin-left: 80px;
+}
