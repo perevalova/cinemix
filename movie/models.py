@@ -15,9 +15,6 @@ class MovieType(models.Model):
         self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
 
-    def get_absolute_url(self):
-        return reverse('movie_type', kwargs={'slug': self.slug})
-
 
 class Country(models.Model):
     slug = models.SlugField(max_length=50, blank=True)
@@ -43,13 +40,12 @@ class Category(models.Model):
         return self.title
 
 
-    def get_absolute_url(self):
-        return reverse('category', kwargs={'slug': self.slug})
-
-
 class Genre(models.Model):
     slug = models.SlugField(max_length=50, blank=True)
     title = models.CharField(max_length=255)
+
+    class Meta:
+        ordering = ['title']
 
     def __str__(self):
         return self.title
@@ -59,16 +55,19 @@ class Actor(models.Model):
     slug = models.SlugField(max_length=255, blank=True)
     name = models.CharField(max_length=255)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return self.name
-
-    def get_absolute_url(self):
-        return reverse('actor', kwargs={'slug': self.slug})
 
 
 class Director(models.Model):
     slug = models.SlugField(max_length=255, blank=True)
     name = models.CharField(max_length=255)
+
+    class Meta:
+        ordering = ['name']
 
     def __str__(self):
         return self.name
@@ -109,4 +108,16 @@ class Movie(models.Model):
             'movie': self.slug,
         }
 
-        return reverse('movie:movie_detail', kwargs=kwargs)
+        return reverse('movie:detail', kwargs=kwargs)
+
+
+class Collection(models.Model):
+    slug = models.SlugField(max_length=255, blank=True)
+    title = models.CharField(max_length=255)
+    movie = models.ManyToManyField(Movie, related_name='collections', blank=True)
+
+    class Meta:
+        ordering = ['title']
+
+    def __str__(self):
+        return self.title
