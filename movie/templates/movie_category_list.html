@@ -81,16 +81,12 @@
                         <a href="{% url 'movie:list_category' type category %}?page={{ movies.number }}&amp;order_by=newest">Новее</a> |
                         <a href="{% url 'movie:list_category' type category %}?page={{ movies.number }}&amp;order_by=oldest">Старее</a>
                     </span>
-{#					<a href="movie_list.html" class="list"><i class="ion-ios-list-outline active"></i></a>#}
-{#					<a  href="movie_grid.html" class="grid"><i class="ion-grid"></i></a>#}
 				</div>
                 {% for movie in movies %}
 				<div class="movie-item-style-2">
 					<img src="{{ movie.image.url }}" alt="">
 					<div class="mv-item-infor">
 						<h6><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h6>
-{#						<h6><a href="{% url 'movie:detail' type category movie.slug %}">{{ movie.title }}</a></h6>#}
-						<p class="rate"><i class="ion-android-star"></i><span>{{ movie.rating }}</span> /10</p>
 						<p class="describe">{{ movie.plot|truncatewords:20 }}</p>
 						<p class="run-time"> Run Time: {{ movie.runtime }} m.</p>
 						<p>Country: {% for country in movie.countries.all %} {{ country }}{% endfor %}</p>
@@ -120,10 +116,12 @@
                                        class="pagin">&laquo;</a>
                                 </li>
                                 {% for p in movies.paginator.page_range %}
-                                    <li {% if movies.number == p %}class="active"{% endif %}>
-                                        <a href="?page={{ p }}{% if order_by %}&amp;order_by={{ order_by }}{% endif %}"
+                                    {% if p <= movies.number|add:4 and p >= movies.number|add:-5 %}
+                                        <li {% if movies.number == p %}class="active"{% endif %}>
+                                            <a href="?page={{ p }}{% if order_by %}&amp;order_by={{ order_by }}{% endif %}"
                                            class="pagin">{{ p }}</a>
-                                    </li>
+                                        </li>
+                                    {% endif %}
                                 {% endfor %}
                                 <li>
                                     <a href="?page={{ movies.paginator.num_pages }}{% if order_by %}&amp;order_by={{ order_by }}{% endif %}"
