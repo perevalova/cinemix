@@ -59,7 +59,7 @@
                                 </tr>
                                 <tr>
                                     <td class="l"><h2>Страна</h2>:</td>
-                                    <td>{% for country in movie.countries.all %}
+                                    <td>{% for country in object.countries.all %}
                                         {{ country }}{% endfor %}
                                     </td>
                                 </tr>
@@ -75,7 +75,7 @@
                                 </tr>
                                 <tr>
                                     <td class="l"><h2>Жанр</h2>:</td>
-                                    <td>{% for genre in movie.genres.all %}
+                                    <td>{% for genre in object.genres.all %}
                                         <span itemprop="genre"> {{ genre }}</span>{% endfor %}
                                 </tr>
                                 <tr>
@@ -98,6 +98,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2">
+                                    {% spaceless %}
                                         <div class="persons-list-holder"><span
                                                 class="l inline"><h2>В ролях актеры</h2>: </span>
                                             {% for actor in object.actors.all %}
@@ -105,6 +106,7 @@
                                                         itemprop="name">{{ actor }}</span>,</span>
                                             {% endfor %}
                                             <span class="item">и другие</span></div>
+                                    {% endspaceless %}
                                     </td>
                                 </tr>
                                 {% if object.trailer %}
