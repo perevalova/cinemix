@@ -76,7 +76,9 @@
                             <ul class="dropdown-menu level1">
                                 <li><a href="{% url 'movie:list' 'animation' %}">Все аниме</a></li>
                                 {% for animation in ANIMATIONS %}
-                                <li><a href="{% url 'movie:list_category' 'animation' animation.slug %}">{{ animation.title }}</a></li>
+                                    <li>
+                                        <a href="{% url 'movie:list_category' 'animation' animation.slug %}">{{ animation.title }}</a>
+                                    </li>
                                 {% endfor %}
                             </ul>
                         </li>

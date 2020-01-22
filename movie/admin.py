@@ -58,6 +58,7 @@ class RatingInline(GenericStackedInline):
 class MovieAdmin(admin.ModelAdmin):
     list_display = ('title', 'type', 'year',)
     list_filter = ('type',)
+    save_on_top = True
     search_fields = ['title', 'genres']
     prepopulated_fields = {'slug': ('title',)}
     list_per_page = 20

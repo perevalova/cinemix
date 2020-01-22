@@ -3,59 +3,27 @@ from movie.models import Category
 
 def film_processor(request):
     """Returns film category objects"""
-
-    films = []
-    categories = Category.objects.filter(movie__type__slug='films')
-    for film in categories:
-        if {'slug': film.slug, 'title': film.title,} not in films:
-            films.append({
-                'slug': film.slug,
-                'title': film.title,
-            })
-
+    films = Category.objects.filter(movie__type='2').distinct()
+    
     return {'FILMS': films}
 
 
 def cartoon_processor(request):
     """Returns cartoon category objects"""
-
-    cartoons = []
-    categories = Category.objects.filter(movie__type__slug='cartoons')
-    for cartoon in categories:
-        if {'slug': cartoon.slug, 'title': cartoon.title, } not in cartoons:
-            cartoons.append({
-                'slug': cartoon.slug,
-                'title': cartoon.title,
-            })
+    cartoons = Category.objects.filter(movie__type='3').distinct()
 
     return {'CARTOONS': cartoons}
 
 
 def serial_processor(request):
     """Returns serial category objects"""
-
-    serials = []
-    categories = Category.objects.all()
-    for serial in categories.filter(movie__type__slug='serials'):
-        if {'slug': serial.slug, 'title': serial.title, } not in serials:
-            serials.append({
-                'slug': serial.slug,
-                'title': serial.title,
-            })
+    serials = Category.objects.filter(movie__type='4').distinct()
 
     return {'SERIALS': serials}
 
 
 def animation_processor(request):
     """Returns animation category objects"""
-
-    animations = []
-    categories = Category.objects.filter(movie__type__slug='animation')
-    for animation in categories:
-        if {'slug': animation.slug, 'title': animation.title, } not in animations:
-            animations.append({
-                'slug': animation.slug,
-                'title': animation.title,
-            })
-
+    animations = Category.objects.filter(movie__type='1').distinct()
+    
     return {'ANIMATIONS': animations}
