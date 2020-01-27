@@ -36,7 +36,7 @@
 										<select
 											name="genres" multiple="" size="1" class="ui fluid dropdown">
 											<option value="">Enter to filter genres</option>
-                                            {% for genre in genres %}
+                                            {% for genre in genres_list %}
 											<option value="{{ genre.slug }}">{{ genre.title}}</option>
                                             {% endfor %}
 										</select>

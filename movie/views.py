@@ -1,14 +1,12 @@
 import random
 
-from django.contrib.contenttypes.models import ContentType
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 
 from django.views.generic import DetailView, ListView
-from django.views.generic.base import View, TemplateView
-from star_ratings.models import Rating
+from django.views.generic.base import View
 
-from movie.models import Movie, Category, MovieType, Genre
+from movie.models import Movie, Genre
+from movie.util import paginate
 
 
 class MovieDetail(DetailView):
@@ -16,36 +14,32 @@ class MovieDetail(DetailView):
     template_name = 'movie_detail.html'
 
     def get_object(self, query_set=None):
-        return get_object_or_404(
-            Movie,
-            type__slug=self.kwargs['type'],
-            categories__slug=self.kwargs['category'],
-            slug=self.kwargs['movie'],
-        )
+        obj = Movie.objects.select_related('type', 'director').prefetch_related('genres', 'countries', 'actors').get(type__slug=self.kwargs['type'], categories__slug=self.kwargs['category'], slug=self.kwargs['movie'])
+        return obj
+
+    # def get_context_data(self, **kwargs):
+    #     sim_movies = Movie.objects.filter(type__slug=self.kwargs['type'], genres=)
 
 
-class MainPage(TemplateView):
+class MainPage(ListView):
     template_name = 'index.html'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # movies_query = Movie.objects.all()
-        context['movies'] = Movie.objects.all()[:8]
-
-        return context
+    queryset = Movie.objects.all().select_related('type').prefetch_related('categories')[:8]
+    context_object_name = 'movies'
 
 
 class MovieList(ListView):
     template_name = 'movie_list.html'
     model = Movie
+    context_object_name = 'movies'
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        movies_list = Movie.objects.filter(type__slug=self.kwargs['type'])
-        # genres = movies_list.
+    def get_queryset(self):
+        movies_list = Movie.objects.filter(
+            type__slug=self.kwargs['type']).select_related(
+            'type').prefetch_related('genres', 'countries', 'categories')
 
-        genres = self.request.GET.get('genres', '')
+        # filtering by genres
+        genres = self.request.GET.getlist('genres', '')
         if genres:
             for genre in genres:
                 movies_list = movies_list.filter(genres__slug=genre)
@@ -56,28 +50,23 @@ class MovieList(ListView):
         elif order_by == 'oldest':
             movies_list = movies_list.order_by('year')
 
+        return movies_list
+
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        movie_amount = self.get_queryset().count()
         movie_type = self.kwargs['type']
 
-        genres_list = Genre.objects.all()
+        # show genres for filtering
+        genres_list = Genre.objects.only('slug', 'title')
 
+        context = paginate(self.get_queryset(), self.paginate_by, self.request, context, var_name='movies')
 
-        paginator = Paginator(movies_list, self.paginate_by)
-
-        page = self.request.GET.get('page')
-
-        try:
-            movies = paginator.page(page)
-        except PageNotAnInteger:
-            movies = paginator.page(1)
-        except EmptyPage:
-            movies = paginator.page(paginator.num_pages)
-
-        context = {
-            'movies': movies,
-            'genres': genres_list,
-            'type': movie_type,
-            # 'category': movie_category,
-        }
+        context['genres_list'] = genres_list
+        context['type'] = movie_type
+        context['movie_amount'] = movie_amount
 
         return context
 
@@ -85,14 +74,17 @@ class MovieList(ListView):
 class MovieCategoryList(ListView):
     template_name = 'movie_category_list.html'
     model = Movie
+    context_object_name = 'movies'
     paginate_by = 5
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        movies_list = Movie.objects.filter(type__slug=self.kwargs['type'], categories__slug=self.kwargs['category'])
+    def get_queryset(self):
+        movies_list = Movie.objects.filter(type__slug=self.kwargs['type'],
+                                           categories__slug=self.kwargs[
+                                               'category']).select_related(
+            'type').prefetch_related('genres', 'countries', 'categories')
 
+        # filtering by genres
         genres = self.request.GET.getlist('genres', '')
-
         if genres:
             for genre in genres:
                 movies_list = movies_list.filter(genres__slug=genre)
@@ -109,29 +101,25 @@ class MovieCategoryList(ListView):
         elif order_by == 'oldest':
             movies_list = movies_list.order_by('year')
 
+        return movies_list
+
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        movie_amount = self.get_queryset().count()
         movie_type = self.kwargs['type']
         movie_category = self.kwargs['category']
 
-        genres_list = Genre.objects.all()
+        # show genres for filtering
+        genres_list = Genre.objects.only('slug', 'title')
 
+        context = paginate(self.get_queryset(), self.paginate_by, self.request, context, var_name='movies')
 
-        paginator = Paginator(movies_list, self.paginate_by)
-
-        page = self.request.GET.get('page')
-
-        try:
-            movies = paginator.page(page)
-        except PageNotAnInteger:
-            movies = paginator.page(1)
-        except EmptyPage:
-            movies = paginator.page(paginator.num_pages)
-
-        context = {
-            'movies': movies,
-            'genres': genres_list,
-            'type': movie_type,
-            'category': movie_category,
-        }
+        context['genres_list'] = genres_list
+        context['type'] = movie_type
+        context['category'] = movie_category
+        context['movie_amount'] = movie_amount
 
         return context
 
@@ -139,21 +127,24 @@ class MovieCategoryList(ListView):
 class SearchView(ListView):
     template_name = 'search.html'
     model = Movie
+    context_object_name = 'movies'
     paginate_by = 10
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-
+    def get_queryset(self):
+        movies = Movie.objects.none()
         search_movie = self.request.GET.get('q', '')
         if search_movie:
             movies = Movie.objects.filter(title__icontains=search_movie)
 
-        # apply pagination, 10 students per page
-        # context = paginate(movies, 10, self.request, context)
+        return movies
 
-        context = {
-            'movies': movies
-        }
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        movie_amount = self.get_queryset().count()
+        context = paginate(self.get_queryset(), self.paginate_by, self.request,
+                           context, var_name='movies')
+        context['movie_amount'] = movie_amount
 
         return context
 
@@ -170,7 +161,8 @@ class RandomMovie(View):
             max_id = Movie.objects.all().aggregate(max_id=Max("id"))['max_id']
             while True:
                 pk = random.randint(1, max_id)
-                movie = Movie.objects.filter(pk=pk).first()
+                movie = Movie.objects.filter(pk=pk).select_related('type', 'director').prefetch_related('genres', 'countries', 'categories', 'actors').first()
+
                 if movie:
                     return render(request, 'random_movie.html',
                                   {'object': movie})
