@@ -19,14 +19,14 @@
     </div>
     <div class="page-single movie-single movie_single">
         <div class="container">
-            <div class="row ipad-width2">
+            <div class="row ipad-width2 random-object-1">
                 <div class="col-md-4 col-sm-12 col-xs-12">
                     <div class="movie-img">
                         {#				<div class="movie-img sticky-sb">#}
                         <img src="{{ object.image.url }}" alt="">
                     </div>
                 </div>
-                <div class="col-md-8 col-sm-12 col-xs-12">
+                <div class="col-md-6 col-sm-12 col-xs-12">
                     <div class="movie-single-ct main-content">
                         <h1 class="bd-hd">{{ object.title }}
                             <span>{{ object.year }}</span></h1>
@@ -59,7 +59,7 @@
                             </tr>
                             <tr>
                                 <td class="l"><h2>Страна</h2>:</td>
-                                <td>{% for country in movie.countries.all %}
+                                <td>{% for country in object.countries.all %}
                                     {{ country }}{% endfor %}
                                 </td>
                             </tr>
@@ -75,7 +75,7 @@
                             </tr>
                             <tr>
                                 <td class="l"><h2>Жанр</h2>:</td>
-                                <td>{% for genre in movie.genres.all %}
+                                <td>{% for genre in object.genres.all %}
                                     <span itemprop="genre"> {{ genre }}</span>{% endfor %}
                             </tr>
                             <tr>
@@ -98,13 +98,15 @@
                             </tr>
                             <tr>
                                 <td colspan="2">
+                                    {% spaceless %}
                                     <div class="persons-list-holder"><span
-                                            class="l inline"><h2>В ролях актеры</h2>: </span>
-                                        {% for actor in movie.actors.all %}
+                                            class="l inline"><h2>В ролях актеры</h2>:</span>
+                                        {% for actor in object.actors.all %}
                                             <span class="item"><span
-                                                    itemprop="name">{{ actor }}</span>,</span>
+                                                    itemprop="name">{{ actor }}</span>, </span>
                                         {% endfor %}
                                         <span class="item">и другие</span></div>
+                                    {% endspaceless %}
                                 </td>
                             </tr>
                             {% if object.trailer %}
@@ -128,13 +130,50 @@
 				</div>
 			</div>
 		</div>
-		<div class="row ipad-width2">
-			<div class="col-md-8 col-sm-12 col-xs-12 plot">
+		<div class="row ipad-width2 random-object-2">
+			<div class="col-md-10 col-sm-12 col-xs-12 plot">
                 <h3>Описание:</h3>
 				<p>{{ object.plot }}</p>
 			</div>
 		</div>
 	</div>
-</div>
+    <div class="movie-items">
+	<div class="container">
+		<div class="row ipad-width">
+			<div class="col-md-8">
+				<div class="title-hd">
+					<h2>Similar</h2>
+				</div>
+				<div class="tabs">
+				    <div class="tab-content">
+				        <div id="tab1" class="tab active">
+				            <div class="row">
+				            	<div class="slick-multiItem">
+                                    {% for sim_movie in sim_movies %}
+				            		<div class="slide-it">
+				            			<div class="movie-item">
+					            			<div class="mv-img">
+					            				<img src="{{ sim_movie.image.url }}" alt="" width="185" height="284">
+					            			</div>
+					            			<div class="hvr-inner">
+					            				<a  href="{{ sim_movie.get_absolute_url }}"> Read more <i class="ion-android-arrow-dropright"></i> </a>
+					            			</div>
+					            			<div class="title-in">
+					            				<h6><a href="index.html#">{{ sim_movie.title }}</a></h6>
+					            				<p><i class="ion-android-star"></i><span>{{ sim_movie.imdb }}</span> /10</p>
+					            			</div>
+                                        </div>
+                                    {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
 
 {% endblock %}
