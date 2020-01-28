@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static from staticfiles %}
-{% load ratings %}
+{% load range_filter %}
 
 {% block content %}
 
@@ -32,14 +32,22 @@
                             <span>{{ object.year }}</span></h1>
 
                         <div class="movie-rate">
-                            {#						<div class="rate">#}
-                            {#							<i class="ion-android-star"></i>#}
-                            {#							<p><span>8.1</span> /10<br>#}
-                            {#							</p>#}
-                            {#						</div>#}
                             <div>
-                                <p>Rate This Movie: </p>
-                                {% ratings object %}
+                                <!-- Rating Stars Box -->
+                            {% csrf_token %}
+                                <div class='rating-stars text-center'>
+                                    <p>Оцените этот фильм: </p>
+                                    <ul id='stars'>
+                                    {% for rate in 1|range:11 %}
+                                        <li class='star {% if object.rating >= rate %}selected{% endif %}'
+                                            data-value='{{ rate }}' data-url="{{ object.get_absolute_url }}">
+                                            <i class='fa fa-star fa-fw'></i>
+                                        </li>
+                                    {% endfor %}
+                                    </ul>
+                                <p><span>{{ object.rating }}</span>/10</p>
+                                </div>
+
                             </div>
                         </div>
                         <table class="b-post__info">

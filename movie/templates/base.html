@@ -22,6 +22,7 @@
     <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/plugins.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     {% block extra_css %}{% endblock extra_css %}
 
 </head>
@@ -48,13 +49,10 @@
 {% include "footer.html" %}
 
 <!-- Javascripts Section -->
-{#<script src="js/jquery.js"></script>#}
 <script src="{% static 'js/jquery.js' %}"></script>
-{#<script src="js/plugins.js"></script>#}
 <script src="{% static 'js/plugins.js' %}"></script>
-{#<script src="js/plugins2.js"></script>#}
 <script src="{% static 'js/plugins2.js' %}"></script>
-{#<script src="js/custom.js"></script>#}
 <script src="{% static 'js/custom.js' %}"></script>
+<script src="{% static 'js/rating.js' %}"></script>
 </body>
 </html>

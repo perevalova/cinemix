@@ -1,0 +1,16 @@
+.rating-stars p {
+    font-size: 18px;
+    color: #abb7c4;
+    margin-bottom: 0;
+}
+.rating-stars p:last-child {
+    margin-bottom: 0;
+    margin-left: 10px;
+    font-size: 11px;
+}
+
+.rating-stars p span {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 400;
+}

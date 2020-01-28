@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 from django.urls import reverse
@@ -74,6 +75,8 @@ class Director(models.Model):
 
 
 class Movie(models.Model):
+    RATING_CHOICES = [(i, f'{i}') for i in range(11)]
+
     slug = models.SlugField(max_length=255, blank=True)
     title = models.CharField(max_length=255)
     type = models.ForeignKey(MovieType, on_delete=models.CASCADE, blank=True, null=True)
@@ -93,6 +96,7 @@ class Movie(models.Model):
     director = models.ForeignKey(Director, on_delete=models.CASCADE, blank=True, null=True)
     watched = models.BooleanField(default=False)
     added = models.DateTimeField(auto_now_add=True)
+    rating = models.IntegerField(choices=RATING_CHOICES, validators=[MinValueValidator(0), MaxValueValidator(10)], default=0)
 
     class Meta:
         ordering = ['-added']

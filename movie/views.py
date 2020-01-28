@@ -1,5 +1,6 @@
 import random
 
+from django.http import JsonResponse
 from django.shortcuts import render
 
 from django.views.generic import DetailView, ListView
@@ -9,13 +10,23 @@ from movie.models import Movie, Genre
 from movie.util import paginate
 
 
-class MovieDetail(DetailView):
-    model = Movie
-    template_name = 'movie_detail.html'
+class MovieDetail(View):
+    def get_object(self):
+        obj = Movie.objects.select_related('type', 'director').prefetch_related('genres', 'countries', 'actors', 'categories').get(type__slug=self.kwargs['type'], categories__slug=self.kwargs['category'], slug=self.kwargs['movie'])
 
-    def get_object(self, query_set=None):
-        obj = Movie.objects.select_related('type', 'director').prefetch_related('genres', 'countries', 'actors').get(type__slug=self.kwargs['type'], categories__slug=self.kwargs['category'], slug=self.kwargs['movie'])
         return obj
+
+    def get(self, request, *args, **kwargs):
+
+        return render(request, 'movie_detail.html', context={'object': self.get_object()})
+
+    def post(self, request, *args, **kwargs):
+        rate = request.POST['star']
+        movie = self.get_object()
+        movie.rating = rate
+        movie.save(update_fields=['rating'])
+
+        return JsonResponse({'status': 'success'})
 
     # def get_context_data(self, **kwargs):
     #     sim_movies = Movie.objects.filter(type__slug=self.kwargs['type'], genres=)
@@ -31,7 +42,7 @@ class MovieList(ListView):
     template_name = 'movie_list.html'
     model = Movie
     context_object_name = 'movies'
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         movies_list = Movie.objects.filter(
@@ -75,7 +86,7 @@ class MovieCategoryList(ListView):
     template_name = 'movie_category_list.html'
     model = Movie
     context_object_name = 'movies'
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         movies_list = Movie.objects.filter(type__slug=self.kwargs['type'],
