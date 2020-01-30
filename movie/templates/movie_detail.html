@@ -2,27 +2,21 @@
 {% load static from staticfiles %}
 {% load range_filter %}
 
+{% block page_title %}{{ object.title }} ({{ object.year }}){% endblock %}
 {% block content %}
-
     <div class="hero mv-single-hero">
-        <div class="container">
-            <div class="row">
+{#        <div class="container">#}
+{#            <div class="row">#}
                 <div class="col-md-12">
-                    <!-- <h1> movie listing - list</h1>
-                    <ul class="breadcumb">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li> <span class="ion-ios-arrow-right"></span> movie listing</li>
-                    </ul> -->
                 </div>
-            </div>
-        </div>
+{#            </div>#}
+{#        </div>#}
     </div>
     <div class="page-single movie-single movie_single">
         <div class="container">
             <div class="row ipad-width2 random-object-1">
                 <div class="col-md-4 col-sm-12 col-xs-12">
                     <div class="movie-img">
-                        {#				<div class="movie-img sticky-sb">#}
                         <img src="{{ object.image.url }}" alt="">
                     </div>
                 </div>
@@ -30,24 +24,28 @@
                     <div class="movie-single-ct main-content">
                         <h1 class="bd-hd">{{ object.title }}
                             <span>{{ object.year }}</span></h1>
-
+                        {% if user.username == 'admin' %}
+                        <div class="social-btn">
+                            <span class="btn go-to-admin"><a
+                                    href="{% url 'admin:movie_movie_change' object.id %}">Change</a></span>
+                        </div>
+                    {% endif %}
                         <div class="movie-rate">
-                            <div>
-                                <!-- Rating Stars Box -->
-                            {% csrf_token %}
-                                <div class='rating-stars text-center'>
-                                    <p>Оцените этот фильм: </p>
-                                    <ul id='stars'>
+                            <!-- Rating Stars Box -->
+                            <div class='rating-stars text-center'>
+                                {% csrf_token %}
+                                <p>Оцените этот фильм: </p>
+                                <ul id='stars'>
                                     {% for rate in 1|range:11 %}
                                         <li class='star {% if object.rating >= rate %}selected{% endif %}'
-                                            data-value='{{ rate }}' data-url="{{ object.get_absolute_url }}">
+                                            data-value='{{ rate }}'
+                                            data-url='{{ object.get_absolute_url }}'
+                                            title='{{ rate }}'>
                                             <i class='fa fa-star fa-fw'></i>
                                         </li>
                                     {% endfor %}
-                                    </ul>
+                                </ul>
                                 <p><span>{{ object.rating }}</span>/10</p>
-                                </div>
-
                             </div>
                         </div>
                         <table class="b-post__info">
@@ -122,9 +120,6 @@
                                     <td class="l">Трейлер:</td>
                                     <td>
                                         <div class="vd-it">
-                                            {#                                        <img class="vd-img"#}
-                                            {#                                             src="{% static 'images/uploads/image4.jpg' %}"#}
-                                            {#                                             alt="">#}
                                             <a class="fancybox-media hvr-grow"
                                                href="{{ object.trailer }}"><img
                                                     src="{% static 'images/uploads/play-vd.png' %}"
