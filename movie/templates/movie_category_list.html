@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% load ratings %}
+
+{% block page_title %}{{ category|title }}{% endblock %}
 {% block content %}
 
 <div class="hero common-hero">
@@ -45,14 +46,14 @@
 								</div>
 								<div class="col-md-12 form-it">
 									<label>Rating Range</label>
-
-									 <select>
+									 <select name="rating">
 										<option value="range">-- Select the rating range below --</option>
-										<option value="saab">-- Select the rating range below --</option>
-										<option value="saab">-- Select the rating range below --</option>
-										<option value="saab">-- Select the rating range below --</option>
-									</select>
-
+										<option value="10">-- 10 --</option>
+										<option value="9">-- More than 9 --</option>
+										<option value="8">-- More than 8 --</option>
+										<option value="7">-- More than 7 --</option>
+										<option value="6">-- More than 6 --</option>
+									 </select>
 								</div>
 								<div class="col-md-12 form-it">
 									<label>Release Year</label>
@@ -87,6 +88,7 @@
 					<img src="{{ movie.image.url }}" alt="">
 					<div class="mv-item-infor">
 						<h6><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h6>
+                        <p class="rate"><i class="ion-android-star"></i><span>{{ movie.rating }}</span> /10</p>
 						<p class="describe">{{ movie.plot|truncatewords:20 }}</p>
 						<p class="run-time"> Run Time: {{ movie.runtime }} m.</p>
 						<p>Country: {% for country in movie.countries.all %} {{ country }}{% endfor %}</p>
@@ -107,31 +109,8 @@
 {#						<a href="movielist.html#">2</a>#}
 {#						<a href="movielist.html#"><i class="ion-arrow-right-b"></i></a>#}
 {#                    </div>#}
-{#                    {% if is_paginated %}#}
-                    {% with order_by=request.GET.order_by %}
-                        <nav class="pagination2">
-                            <ul class="pagination">
-                                <li>
-                                    <a href="?page=1{% if order_by %}&amp;order_by={{ order_by }}{% endif %}"
-                                       class="pagin">&laquo;</a>
-                                </li>
-                                {% for p in movies.paginator.page_range %}
-                                    {% if p <= movies.number|add:4 and p >= movies.number|add:-5 %}
-                                        <li {% if movies.number == p %}class="active"{% endif %}>
-                                            <a href="?page={{ p }}{% if order_by %}&amp;order_by={{ order_by }}{% endif %}"
-                                           class="pagin">{{ p }}</a>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                                <li>
-                                    <a href="?page={{ movies.paginator.num_pages }}{% if order_by %}&amp;order_by={{ order_by }}{% endif %}"
-                                       class="pagin">
-                                        &raquo;</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    {% endwith %}
-{#                {% endif %}#}
+
+                {% include 'pagination.html' %}
                 </div>
             </div>
 		</div>
