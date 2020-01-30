@@ -2,7 +2,6 @@ import random
 
 from django.http import JsonResponse
 from django.shortcuts import render
-
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import View
 
@@ -10,15 +9,14 @@ from movie.models import Movie, Genre
 from movie.util import paginate
 
 
-class MovieDetail(View):
-    def get_object(self):
+class MovieDetail(DetailView):
+    model = Movie
+    template_name = 'movie_detail.html'
+
+    def get_object(self, queryset=None):
         obj = Movie.objects.select_related('type', 'director').prefetch_related('genres', 'countries', 'actors', 'categories').get(type__slug=self.kwargs['type'], categories__slug=self.kwargs['category'], slug=self.kwargs['movie'])
 
         return obj
-
-    def get(self, request, *args, **kwargs):
-
-        return render(request, 'movie_detail.html', context={'object': self.get_object()})
 
     def post(self, request, *args, **kwargs):
         rate = request.POST['star']
@@ -55,6 +53,17 @@ class MovieList(ListView):
             for genre in genres:
                 movies_list = movies_list.filter(genres__slug=genre)
 
+        # filtering by rating
+        rating = self.request.GET.get('rating', '')
+        if rating:
+            movies_list = movies_list.filter(rating__gte=rating)
+
+        year_from = self.request.GET.get('year_from', '')
+        year_to = self.request.GET.get('year_to', '')
+
+        if year_from and year_to:
+            movies_list = movies_list.filter(year__range=(year_from, year_to))
+
         order_by = self.request.GET.get('order_by', '')
         if order_by == 'newest':
             movies_list = movies_list.order_by('-year')
@@ -62,7 +71,6 @@ class MovieList(ListView):
             movies_list = movies_list.order_by('year')
 
         return movies_list
-
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -99,6 +107,10 @@ class MovieCategoryList(ListView):
         if genres:
             for genre in genres:
                 movies_list = movies_list.filter(genres__slug=genre)
+        # filtering by rating
+        rating = self.request.GET.get('rating', '')
+        if rating:
+            movies_list = movies_list.filter(rating__gte=rating)
 
         year_from = self.request.GET.get('year_from', '')
         year_to = self.request.GET.get('year_to', '')
@@ -113,7 +125,6 @@ class MovieCategoryList(ListView):
             movies_list = movies_list.order_by('year')
 
         return movies_list
-
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -164,7 +175,6 @@ class RandomMovie(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, 'random_movie.html')
-
 
     def post(self, request, *args, **kwargs):
         if self.request.POST.get('random', ''):
