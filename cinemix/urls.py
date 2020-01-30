@@ -21,7 +21,6 @@ from cinemix import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ratings/', include('star_ratings.urls', namespace='ratings')),
     path('', include('movie.urls', namespace='movie')),
 ]
 

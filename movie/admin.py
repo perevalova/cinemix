@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericStackedInline
-from star_ratings.models import Rating
 
 from .models import Movie, MovieType, Category, Country, Director, Actor, Genre, \
     Collection
@@ -49,17 +48,11 @@ class CollectionAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
 
 
-class RatingInline(GenericStackedInline):
-    model = Rating
-    fields = ['total']
-    extra = 0
-
-
 class MovieAdmin(admin.ModelAdmin):
     list_display = ('title', 'type', 'year',)
     list_filter = ('type',)
     save_on_top = True
-    search_fields = ['title', 'genres']
+    search_fields = ['title']
     prepopulated_fields = {'slug': ('title',)}
     list_per_page = 20
     inlines = (CollectionInline,)

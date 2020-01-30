@@ -40,10 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
 
-    # 3rd part
-    'star_ratings',
+    # 3-rd party
+    'debug_toolbar',
 
     # local
     'movie.apps.MovieConfig'
@@ -73,10 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'movie.context_processors.film_processor',
-                'movie.context_processors.cartoon_processor',
-                'movie.context_processors.serial_processor',
-                'movie.context_processors.animation_processor',
+                'movie.context_processors.movie_processor',
             ],
         },
     },
@@ -143,16 +139,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-
-# Star rating
-STAR_RATINGS_RANGE = 10
-STAR_RATINGS_STAR_HEIGHT = 20
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
