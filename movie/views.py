@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import View
 
+from movie.forms import MovieForm
 from movie.models import Movie, Genre
 from movie.util import paginate
 
@@ -19,10 +20,10 @@ class MovieDetail(DetailView):
         return obj
 
     def post(self, request, *args, **kwargs):
-        rate = request.POST['star']
         movie = self.get_object()
-        movie.rating = rate
-        movie.save(update_fields=['rating'])
+        form = MovieForm(data=self.request.POST, instance=movie)
+        if form.is_valid():
+            form.save()
 
         return JsonResponse({'status': 'success'})
 
@@ -77,7 +78,6 @@ class MovieList(ListView):
 
         movie_amount = self.get_queryset().count()
         movie_type = self.kwargs['type']
-
         # show genres for filtering
         genres_list = Genre.objects.only('slug', 'title')
 

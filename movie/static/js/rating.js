@@ -42,7 +42,7 @@ $(document).ready(function () {
             'async': true,
             'dataType': 'json',
             'data': {
-                'star': ratingValue,
+                'rating': ratingValue,
                 'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
             },
         })
