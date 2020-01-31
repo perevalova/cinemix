@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericStackedInline
 
 from .models import Movie, MovieType, Category, Country, Director, Actor, Genre, \
-    Collection
+    Collection, Parser
 
 
 class MovieTypeInline(admin.TabularInline):
@@ -56,6 +56,10 @@ class MovieAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     list_per_page = 20
     inlines = (CollectionInline,)
+
+@admin.register(Parser)
+class ParserAdmin(admin.ModelAdmin):
+    pass
 
 
 admin.site.register(Movie, MovieAdmin)

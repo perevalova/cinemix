@@ -125,3 +125,28 @@ class Collection(models.Model):
 
     def __str__(self):
         return self.title
+
+class Parser(models.Model):
+    COMMAND_CHOICES = [(i, f'{i}') for i in range(1, 6)]
+
+    url = models.URLField()
+    command = models.IntegerField(choices=COMMAND_CHOICES, default=1)
+
+    def save(self, *args, **kwargs):
+        from movie.management.commands.get_movie3 import crawler as crawler_1
+        from movie.management.commands.get_movie4 import crawler as crawler_2
+        from movie.management.commands.get_movie5 import crawler as crawler_3
+
+        # with slogan or list
+        if self.command == 1:
+            crawler_1(self.url)
+        # without slogan and list
+        elif self.command == 2:
+            crawler_2(self.url)
+        # with slogan and list
+        elif self.command == 3:
+            crawler_3(self.url)
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.command}'
