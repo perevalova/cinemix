@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cache %}
 
 {% block page_title %}{{ category|title }}{% endblock %}
 {% block content %}
@@ -26,6 +27,7 @@
 					<div class="searh-form">
 						<h4 class="sb-title">Search for movie</h4>
 						<form class="form-style-1" action="{% url 'movie:list_category' type category %}" method="get">
+                         {% cache 21600 sidebar %}
 							<div class="row">
 {#								<div class="col-md-12 form-it">#}
 {#									<label>Movie name</label>#}
@@ -47,7 +49,7 @@
 								<div class="col-md-12 form-it">
 									<label>Rating Range</label>
 									 <select name="rating">
-										<option value="range">-- Select the rating range below --</option>
+										<option value="">-- Select the rating range below --</option>
 										<option value="10">-- 10 --</option>
 										<option value="9">-- More than 9 --</option>
 										<option value="8">-- More than 8 --</option>
@@ -70,6 +72,7 @@
 									<input class="submit" type="submit" value="submit">
 								</div>
 							</div>
+                        {% endcache %}
 						</form>
 					</div>
 				</div>
