@@ -67,9 +67,9 @@ class MovieList(ListView):
 
         order_by = self.request.GET.get('order_by', '')
         if order_by == 'newest':
-            movies_list = movies_list.order_by('-year')
+            movies_list = movies_list.order_by('-year', 'id')
         elif order_by == 'oldest':
-            movies_list = movies_list.order_by('year')
+            movies_list = movies_list.order_by('year', 'id')
 
         return movies_list
 
@@ -120,9 +120,9 @@ class MovieCategoryList(ListView):
 
         order_by = self.request.GET.get('order_by', '')
         if order_by == 'newest':
-            movies_list = movies_list.order_by('-year')
+            movies_list = movies_list.order_by('-year', 'id')
         elif order_by == 'oldest':
-            movies_list = movies_list.order_by('year')
+            movies_list = movies_list.order_by('year', 'id')
 
         return movies_list
 
