@@ -33,7 +33,7 @@ class MovieDetail(DetailView):
 
 class MainPage(ListView):
     template_name = 'index.html'
-    queryset = Movie.objects.all().select_related('type').prefetch_related('categories')[:8]
+    queryset = Movie.objects.all().select_related('type').prefetch_related('categories')[:12]
     context_object_name = 'movies'
 
 
@@ -156,7 +156,10 @@ class SearchView(ListView):
         movies = Movie.objects.none()
         search_movie = self.request.GET.get('q', '')
         if search_movie:
-            movies = Movie.objects.filter(title__icontains=search_movie)
+            movies = Movie.objects.filter(
+                title__icontains=search_movie).select_related(
+                'type', 'director').prefetch_related(
+                'genres', 'countries', 'actors', 'categories')
 
         return movies
 

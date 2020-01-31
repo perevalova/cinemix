@@ -30,10 +30,6 @@
                               action="{% url 'movie:list' type %}" method="get">
                             {% cache 21600 sidebar %}
 							<div class="row">
-{#								<div class="col-md-12 form-it">#}
-{#									<label>Movie name</label>#}
-{#									<input type="text" placeholder="Enter keywords">#}
-{#								</div>#}
 								<div class="col-md-12 form-it">
 									<label>Genres</label>
 									<div class="group-ip">
@@ -109,14 +105,17 @@
 				<div class="movie-item-style-2">
 					<img src="{{ movie.image.url }}" alt="">
 					<div class="mv-item-infor">
-						<h6><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h6>
+						<h6><a href="{{ movie.get_absolute_url }}">{{ movie.title }} <span>({{ movie.year }})</span></a></h6>
                         <p class="rate"><i
                                 class="ion-android-star"></i><span>{{ movie.rating }}</span>
                             /10</p>
 						<p class="describe">{{ movie.plot|truncatewords:20 }}</p>
 						<p class="run-time"> Run Time: {{ movie.runtime }} m.</p>
 						<p>Country: {% for country in movie.countries.all %} {{ country }}{% endfor %}</p>
-						<p>Release: {{ movie.year }}</p>
+						<p>Rating: <span>IMDb: <span
+                                        class="bold">{{ movie.imdb }}</span></span>,
+                                    <span>Кинопоиск: <span
+                                            class="bold">{{ movie.kinopoisk }}</span></span></p>
 						<p>Genre: {% for genre in movie.genres.all %} {{ genre }}{% endfor %}</p>
 					</div>
 				</div>

@@ -77,7 +77,7 @@ class Director(models.Model):
 class Movie(models.Model):
     RATING_CHOICES = [(i, f'{i}') for i in range(11)]
 
-    slug = models.SlugField(max_length=255, blank=True)
+    slug = models.SlugField(max_length=255, blank=True, unique=True)
     title = models.CharField(max_length=255)
     type = models.ForeignKey(MovieType, on_delete=models.CASCADE, blank=True, null=True)
     year = models.PositiveSmallIntegerField()
@@ -133,19 +133,20 @@ class Parser(models.Model):
     command = models.IntegerField(choices=COMMAND_CHOICES, default=1)
 
     def save(self, *args, **kwargs):
+        from threading import Thread
         from movie.management.commands.get_movie3 import crawler as crawler_1
         from movie.management.commands.get_movie4 import crawler as crawler_2
         from movie.management.commands.get_movie5 import crawler as crawler_3
 
         # with slogan or list
         if self.command == 1:
-            crawler_1(self.url)
+            Thread(target=crawler_1, args=(self.url,)).start()
         # without slogan and list
         elif self.command == 2:
-            crawler_2(self.url)
+            Thread(target=crawler_2, args=(self.url,)).start()
         # with slogan and list
         elif self.command == 3:
-            crawler_3(self.url)
+            Thread(target=crawler_3, args=(self.url,)).start()
         return super().save(*args, **kwargs)
 
     def __str__(self):
