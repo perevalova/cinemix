@@ -90,6 +90,60 @@ class MovieList(ListView):
         return context
 
 
+
+class CollectionList(ListView):
+    template_name = 'movie_list.html'
+    model = Movie
+    context_object_name = 'movies'
+    paginate_by = 10
+
+    def get_queryset(self):
+        movies_list = Movie.objects.filter(
+            collections__slug=self.kwargs['collection']).select_related(
+            'type').prefetch_related('genres', 'countries', 'categories')
+
+        # filtering by genres
+        genres = self.request.GET.getlist('genres', '')
+        if genres:
+            for genre in genres:
+                movies_list = movies_list.filter(genres__slug=genre)
+
+        # filtering by rating
+        rating = self.request.GET.get('rating', '')
+        if rating:
+            movies_list = movies_list.filter(rating__gte=rating)
+
+        year_from = self.request.GET.get('year_from', '')
+        year_to = self.request.GET.get('year_to', '')
+
+        if year_from and year_to:
+            movies_list = movies_list.filter(year__range=(year_from, year_to))
+
+        order_by = self.request.GET.get('order_by', '')
+        if order_by == 'newest':
+            movies_list = movies_list.order_by('-year', 'id')
+        elif order_by == 'oldest':
+            movies_list = movies_list.order_by('year', 'id')
+
+        return movies_list
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        movie_amount = self.get_queryset().count()
+        movie_collection = self.kwargs['collection']
+        # show genres for filtering
+        genres_list = Genre.objects.only('slug', 'title')
+
+        context = paginate(self.get_queryset(), self.paginate_by, self.request, context, var_name='movies')
+
+        context['genres_list'] = genres_list
+        context['type'] = movie_collection
+        context['movie_amount'] = movie_amount
+
+        return context
+
+
 class MovieCategoryList(ListView):
     template_name = 'movie_category_list.html'
     model = Movie

@@ -1,4 +1,4 @@
-from movie.models import Category
+from movie.models import Category, Collection
 
 
 def movie_processor(request):
@@ -7,9 +7,11 @@ def movie_processor(request):
     cartoons = Category.objects.filter(movie__type='3').distinct()
     serials = Category.objects.filter(movie__type='4').distinct()
     animations = Category.objects.filter(movie__type='1').distinct()
+    collections = Collection.objects.all()
 
     return {'FILMS': films,
             'CARTOONS': cartoons,
             'SERIALS': serials,
-            'ANIMATIONS': animations}
+            'ANIMATIONS': animations,
+            'COLLECTIONS': collections}
 

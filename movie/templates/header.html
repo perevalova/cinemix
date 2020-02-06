@@ -83,6 +83,20 @@
                                 {% endfor %}
                             </ul>
                         </li>
+                        <li class="dropdown first">
+                            <a class="btn btn-default dropdown-toggle lv1"
+                               data-toggle="dropdown" data-hover="dropdown">
+                                collections <i class="fa fa-angle-down"
+                                           aria-hidden="true"></i>
+                            </a>
+                            <ul class="dropdown-menu level1">
+                                {% for collection in COLLECTIONS %}
+                                    <li>
+                                        <a href="{% url 'movie:collection' collection.slug %}">{{ collection.title }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
                         <li><a href="{% url 'movie:random' %}">random</a></li>
                     </ul>
                 </div>
