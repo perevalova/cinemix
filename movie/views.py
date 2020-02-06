@@ -7,7 +7,7 @@ from django.views.generic.base import View
 
 from movie.forms import MovieForm
 from movie.models import Movie, Genre
-from movie.util import paginate
+from movie.util import paginate, filtering
 
 
 class MovieDetail(DetailView):
@@ -47,29 +47,8 @@ class MovieList(ListView):
         movies_list = Movie.objects.filter(
             type__slug=self.kwargs['type']).select_related(
             'type').prefetch_related('genres', 'countries', 'categories')
-
-        # filtering by genres
-        genres = self.request.GET.getlist('genres', '')
-        if genres:
-            for genre in genres:
-                movies_list = movies_list.filter(genres__slug=genre)
-
-        # filtering by rating
-        rating = self.request.GET.get('rating', '')
-        if rating:
-            movies_list = movies_list.filter(rating__gte=rating)
-
-        year_from = self.request.GET.get('year_from', '')
-        year_to = self.request.GET.get('year_to', '')
-
-        if year_from and year_to:
-            movies_list = movies_list.filter(year__range=(year_from, year_to))
-
-        order_by = self.request.GET.get('order_by', '')
-        if order_by == 'newest':
-            movies_list = movies_list.order_by('-year', 'id')
-        elif order_by == 'oldest':
-            movies_list = movies_list.order_by('year', 'id')
+        # filtering
+        movies_list = filtering(self.request, movies_list)
 
         return movies_list
 
@@ -90,7 +69,6 @@ class MovieList(ListView):
         return context
 
 
-
 class CollectionList(ListView):
     template_name = 'movie_list.html'
     model = Movie
@@ -101,29 +79,8 @@ class CollectionList(ListView):
         movies_list = Movie.objects.filter(
             collections__slug=self.kwargs['collection']).select_related(
             'type').prefetch_related('genres', 'countries', 'categories')
-
-        # filtering by genres
-        genres = self.request.GET.getlist('genres', '')
-        if genres:
-            for genre in genres:
-                movies_list = movies_list.filter(genres__slug=genre)
-
-        # filtering by rating
-        rating = self.request.GET.get('rating', '')
-        if rating:
-            movies_list = movies_list.filter(rating__gte=rating)
-
-        year_from = self.request.GET.get('year_from', '')
-        year_to = self.request.GET.get('year_to', '')
-
-        if year_from and year_to:
-            movies_list = movies_list.filter(year__range=(year_from, year_to))
-
-        order_by = self.request.GET.get('order_by', '')
-        if order_by == 'newest':
-            movies_list = movies_list.order_by('-year', 'id')
-        elif order_by == 'oldest':
-            movies_list = movies_list.order_by('year', 'id')
+        # filtering
+        movies_list = filtering(self.request, movies_list)
 
         return movies_list
 
@@ -155,28 +112,8 @@ class MovieCategoryList(ListView):
                                            categories__slug=self.kwargs[
                                                'category']).select_related(
             'type').prefetch_related('genres', 'countries', 'categories')
-
-        # filtering by genres
-        genres = self.request.GET.getlist('genres', '')
-        if genres:
-            for genre in genres:
-                movies_list = movies_list.filter(genres__slug=genre)
-        # filtering by rating
-        rating = self.request.GET.get('rating', '')
-        if rating:
-            movies_list = movies_list.filter(rating__gte=rating)
-
-        year_from = self.request.GET.get('year_from', '')
-        year_to = self.request.GET.get('year_to', '')
-
-        if year_from and year_to:
-            movies_list = movies_list.filter(year__range=(year_from, year_to))
-
-        order_by = self.request.GET.get('order_by', '')
-        if order_by == 'newest':
-            movies_list = movies_list.order_by('-year', 'id')
-        elif order_by == 'oldest':
-            movies_list = movies_list.order_by('year', 'id')
+        # filtering
+        movies_list = filtering(self.request, movies_list)
 
         return movies_list
 

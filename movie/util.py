@@ -1,6 +1,44 @@
 from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
 
 
+def filtering(request, object_list):
+    """Filter objects provided by view.
+
+    This function takes:
+    * request:
+    * list of elements;
+
+    It returns filtered Queryset.
+    """
+
+    # filtering by genres
+    genres = request.GET.getlist('genres', '')
+    if genres:
+        for genre in genres:
+            object_list = object_list.filter(genres__slug=genre)
+
+    # filtering by rating
+    rating = request.GET.get('rating', '')
+    if rating:
+        object_list = object_list.filter(rating__gte=rating)
+
+    # filtering by year
+    year_from = request.GET.get('year_from', '')
+    year_to = request.GET.get('year_to', '')
+
+    if year_from and year_to:
+        object_list = object_list.filter(year__range=(year_from, year_to))
+
+     # order Queryset
+    order_by = request.GET.get('order_by', '')
+    if order_by == 'newest':
+        object_list = object_list.order_by('-year', 'id')
+    elif order_by == 'oldest':
+        object_list = object_list.order_by('year', 'id')
+
+    return object_list
+
+
 def paginate(objects, size, request, context, var_name='object_list'):
     """Paginate objects provided by view.
 
