@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load cache %}
 
-{% block page_title %}{{ type|title }}{% endblock %}
+{% block page_title %}{{ view.kwargs.type|title }}{% endblock %}
 {% block content %}
 
 <div class="hero common-hero">
@@ -9,10 +9,10 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="hero-ct">
-					<h1> All {{ type }} - list</h1>
+					<h1> All {{ view.kwargs.type }} - list</h1>
 					<ul class="breadcumb">
 						<li class="active"><a href="{% url 'movie:home' %}">Home</a></li>
-						<li> <span class="ion-ios-arrow-right"></span> All {{ type }}</li>
+						<li> <span class="ion-ios-arrow-right"></span> All {{ view.kwargs.type }}</li>
 					</ul>
 				</div>
 			</div>
@@ -27,7 +27,7 @@
 					<div class="searh-form">
 						<h4 class="sb-title">Search for movie</h4>
                         <form class="form-style-1"
-                              action="{% url 'movie:list' type %}" method="get">
+                              action="" method="get">
                             {% cache 21600 sidebar %}
 							<div class="row">
 								<div class="col-md-12 form-it">
@@ -95,8 +95,8 @@
 					<p>Found <span>{{ movie_amount }}</span> in total</p>
 					<label>Sort by:</label>
                     <span>
-                        <a href="{% url 'movie:list' type %}?page={{ movies.number }}&amp;order_by=newest">Новее</a> |
-                        <a href="{% url 'movie:list' type %}?page={{ movies.number }}&amp;order_by=oldest">Старее</a>
+                        <a href="{% url 'movie:list' view.kwargs.type %}?page={{ movies.number }}&amp;order_by=newest">Новее</a> |
+                        <a href="{% url 'movie:list' view.kwargs.type %}?page={{ movies.number }}&amp;order_by=oldest">Старее</a>
                     </span>
 {#					<a href="movie_list.html" class="list"><i class="ion-ios-list-outline active"></i></a>#}
 {#					<a  href="movie_grid.html" class="grid"><i class="ion-grid"></i></a>#}

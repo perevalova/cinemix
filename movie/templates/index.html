@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
+{% load cache %}
 {% load static from staticfiles %}
-{% block content %}
 
+{% block content %}
+    {% cache 21600 slider %}
     <div class="slider movie-items">
         <div class="container">
             <div class="row">
@@ -28,5 +30,5 @@
             </div>
         </div>
     </div>
-
+    {% endcache %}
 {% endblock %}
