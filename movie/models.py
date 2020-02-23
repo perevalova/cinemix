@@ -78,7 +78,7 @@ class Movie(models.Model):
     RATING_CHOICES = [(i, f'{i}') for i in range(11)]
 
     slug = models.SlugField(max_length=255, blank=True, unique=True)
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, db_index=True)
     type = models.ForeignKey(MovieType, on_delete=models.CASCADE, blank=True, null=True)
     year = models.PositiveSmallIntegerField()
     runtime = models.PositiveSmallIntegerField()
@@ -126,6 +126,7 @@ class Collection(models.Model):
     def __str__(self):
         return self.title
 
+
 class Parser(models.Model):
     COMMAND_CHOICES = [(i, f'{i}') for i in range(1, 6)]
 
@@ -134,8 +135,8 @@ class Parser(models.Model):
 
     def save(self, *args, **kwargs):
         from threading import Thread
-        from movie.management.commands.get_movie3 import crawler as crawler_1
-        from movie.management.commands.get_movie4 import crawler as crawler_2
+        from movie.management.commands.get_movie4 import crawler as crawler_1
+        from movie.management.commands.get_movie3 import crawler as crawler_2
         from movie.management.commands.get_movie5 import crawler as crawler_3
 
         # with slogan or list
