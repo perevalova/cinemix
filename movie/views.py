@@ -20,6 +20,7 @@ class MovieDetail(DetailView):
         return obj
 
     def post(self, request, *args, **kwargs):
+        # form for send rating
         movie = self.get_object()
         form = MovieForm(data=self.request.POST, instance=movie)
         if form.is_valid():
@@ -148,7 +149,7 @@ class SearchView(ListView):
         search_movie = self.request.GET.get('q', '')
         if search_movie:
             movies = Movie.objects.filter(
-                title__icontains=search_movie).select_related(
+                title__search=search_movie).select_related(
                 'type', 'director').prefetch_related(
                 'genres', 'countries', 'actors', 'categories')
 
