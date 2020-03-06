@@ -12,7 +12,7 @@ from movie.models import *
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36'}
 url = ''
 
-def crawler():
+def crawler(url):
     session = requests.Session()
     request = session.get(url, headers=headers)
     from slugify import slugify
@@ -51,7 +51,7 @@ def crawler():
             actors.append(actor.get_text())
 
         try:
-            img_resp = requests.get(image)
+            img_resp = requests.get('https://rezka.ag' + image)
 
             image_name = 'img/' + slug + image[-4:]
 
@@ -114,7 +114,7 @@ class Command(BaseCommand):
     help = 'Running movies scraper'
 
     def handle(self, *args, **options):
-        crawler()
+        crawler(url)
         print('Done!')
         # with ThreadPoolExecutor(max_workers=10) as executor:
         #     executor.map(crawler, url)

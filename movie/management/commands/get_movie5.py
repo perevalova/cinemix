@@ -12,7 +12,7 @@ from movie.models import *
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36'}
 url = ''
 
-def crawler():
+def crawler(url):
     session = requests.Session()
     request = session.get(url, headers=headers)
     from slugify import slugify
@@ -33,6 +33,7 @@ def crawler():
         year = year.split()[0]
         slug = slugify(title + '-' + year)
         runtime = soup.find('td', attrs={'itemprop': 'duration'}).get_text().split()[0]
+        # runtime = ''
         director = soup.find('span', attrs={'itemprop': 'director'}).find('span').get_text()
         categories = soup.find_all('span', attrs={'itemprop': 'genre'})[0].get_text()
         categories_slug = url.split('/')[4]
@@ -51,7 +52,7 @@ def crawler():
             actors.append(actor.get_text())
 
         try:
-            img_resp = requests.get(image)
+            img_resp = requests.get('https://rezka.ag' + image)
 
             image_name = 'img/' + slug + image[-4:]
 
@@ -114,7 +115,7 @@ class Command(BaseCommand):
     help = 'Running movies scraper'
 
     def handle(self, *args, **options):
-        crawler()
+        crawler(url)
         print('Done!')
         # with ThreadPoolExecutor(max_workers=10) as executor:
         #     executor.map(crawler, url)

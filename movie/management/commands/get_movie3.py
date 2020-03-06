@@ -1,6 +1,6 @@
 """for rezka.ag with BeautifulSoup with slogan/lists"""
 import sys
-from threading import Thread
+from django.templatetags.static import static
 
 import requests
 from bs4 import BeautifulSoup as bs
@@ -8,11 +8,10 @@ from django.core.management import BaseCommand
 
 from movie.models import *
 
-
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36'}
-url = ""
+url = ''
 
-def crawler():
+def crawler(url):
     session = requests.Session()
     request = session.get(url, headers=headers)
     from slugify import slugify
@@ -51,7 +50,7 @@ def crawler():
             actors.append(actor.get_text())
 
         try:
-            img_resp = requests.get(image)
+            img_resp = requests.get('https://rezka.ag' + image)
 
             image_name = 'img/' + slug + image[-4:]
 
@@ -61,7 +60,8 @@ def crawler():
             del img_resp
         except Exception as e:
             print(e, type(e), sys.exc_info()[-1].tb_lineno)
-            image_name = 'default.jpg'
+
+            image_name = static('images/default.jpg')
 
 
         movie = {
@@ -114,7 +114,5 @@ class Command(BaseCommand):
     help = 'Running movies scraper'
 
     def handle(self, *args, **options):
-        crawler()
+        crawler(url)
         print('Done!')
-        # with ThreadPoolExecutor(max_workers=10) as executor:
-        #     executor.map(crawler, url)
