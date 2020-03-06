@@ -16,6 +16,7 @@ def auto_delete_file_on_delete(sender, instance, **kwargs):
         if os.path.isfile(instance.image.path):
             os.remove(instance.image.path)
 
+
 @receiver(pre_save, sender=Movie)
 def auto_delete_file_on_change(sender, instance, **kwargs):
     """
