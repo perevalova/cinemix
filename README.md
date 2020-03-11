@@ -9,7 +9,7 @@ Movie catalog
 pip install -r requirements.txt
 ```
 
-#### 2. Implement migration:
+#### 2. Implement migrations:
 
 ```bash
 python manage.py migrate
