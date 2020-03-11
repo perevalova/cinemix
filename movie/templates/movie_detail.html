@@ -20,30 +20,38 @@
                     <div class="movie-single-ct main-content">
                         <h1 class="bd-hd">{{ object.title }}
                             <span>{{ object.year }}</span></h1>
-                        {% if user.username == 'admin' %}
-                        <div class="social-btn">
+                        {% if request.user.is_superuser %}
+                            <div class="social-btn">
                             <span class="btn go-to-admin"><a
                                     href="{% url 'admin:movie_movie_change' object.id %}">Change</a></span>
-                        </div>
-                    {% endif %}
-                        <div class="movie-rate">
-                            <!-- Rating Stars Box -->
-                            <div class='rating-stars text-center'>
-                                {% csrf_token %}
-                                <p>Оцените этот фильм: </p>
-                                <ul id='stars'>
-                                    {% for rate in 1|range:11 %}
-                                        <li class='star {% if object.rating >= rate %}selected{% endif %}'
-                                            data-value='{{ rate }}'
-                                            data-url='{{ object.get_absolute_url }}'
-                                            title='{{ rate }}'>
-                                            <i class='fa fa-star fa-fw'></i>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                                <p><span>{{ object.rating }}</span>/10</p>
                             </div>
-                        </div>
+                            <div class="movie-rate">
+                                <!-- Rating Stars Box -->
+                                <div class='rating-stars text-center'>
+                                    {% csrf_token %}
+                                    <p>Оцените этот фильм: </p>
+                                    <ul id='stars'>
+                                        {% for rate in 1|range:11 %}
+                                            <li class='star {% if object.rating >= rate %}selected{% endif %}'
+                                                data-value='{{ rate }}'
+                                                data-url='{{ object.get_absolute_url }}'
+                                                title='{{ rate }}'>
+                                                <i class='fa fa-star fa-fw'></i>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                    <p><span>{{ object.rating }}</span>/10</p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="movie-rate">
+                                <div class="rate">
+                                    <i class="ion-android-star"></i>
+                                    <p><span>{{ object.rating }}</span> /10<br>
+                                    </p>
+                                </div>
+                            </div>
+                        {% endif %}
                         <table class="b-post__info">
                             <tbody>
                             <tr>
@@ -136,43 +144,43 @@
 			</div>
 		</div>
 	</div>
-    <div class="movie-items">
-	<div class="container">
-		<div class="row ipad-width">
-			<div class="col-md-8">
-				<div class="title-hd">
-					<h2>Similar</h2>
-				</div>
-				<div class="tabs">
-				    <div class="tab-content">
-				        <div id="tab1" class="tab active">
-				            <div class="row">
-				            	<div class="slick-multiItem">
-                                    {% for sim_movie in sim_movies %}
-				            		<div class="slide-it">
-				            			<div class="movie-item">
-					            			<div class="mv-img">
-					            				<img src="{{ sim_movie.image.url }}" alt="" width="185" height="284">
-					            			</div>
-					            			<div class="hvr-inner">
-					            				<a  href="{{ sim_movie.get_absolute_url }}"> Read more <i class="ion-android-arrow-dropright"></i> </a>
-					            			</div>
-					            			<div class="title-in">
-					            				<h6><a href="index.html#">{{ sim_movie.title }}</a></h6>
-					            				<p><i class="ion-android-star"></i><span>{{ sim_movie.imdb }}</span> /10</p>
-					            			</div>
-                                        </div>
-                                    {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
+{#    <div class="movie-items">#}
+{#	<div class="container">#}
+{#		<div class="row ipad-width">#}
+{#			<div class="col-md-8">#}
+{#				<div class="title-hd">#}
+{#					<h2>Similar</h2>#}
+{#				</div>#}
+{#				<div class="tabs">#}
+{#				    <div class="tab-content">#}
+{#				        <div id="tab1" class="tab active">#}
+{#				            <div class="row">#}
+{#				            	<div class="slick-multiItem">#}
+{#                                    {% for sim_movie in sim_movies %}#}
+{#				            		<div class="slide-it">#}
+{#				            			<div class="movie-item">#}
+{#					            			<div class="mv-img">#}
+{#					            				<img src="{{ sim_movie.image.url }}" alt="" width="185" height="284">#}
+{#					            			</div>#}
+{#					            			<div class="hvr-inner">#}
+{#					            				<a  href="{{ sim_movie.get_absolute_url }}"> Read more <i class="ion-android-arrow-dropright"></i> </a>#}
+{#					            			</div>#}
+{#					            			<div class="title-in">#}
+{#					            				<h6><a href="index.html#">{{ sim_movie.title }}</a></h6>#}
+{#					            				<p><i class="ion-android-star"></i><span>{{ sim_movie.imdb }}</span> /10</p>#}
+{#					            			</div>#}
+{#                                        </div>#}
+{#                                    {% endfor %}#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#    </div>#}
     </div>
 
 {% endblock %}
