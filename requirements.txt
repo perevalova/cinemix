@@ -9,6 +9,7 @@ django-braces==1.13.0
 django-debug-toolbar==2.1
 django-model-utils==4.0.0
 fake-useragent==0.1.11
+gunicorn==19.9.0
 idna==2.8
 lxml==4.4.2
 parse==1.14.0
