@@ -56,7 +56,7 @@
                                 <tr>
                                     <td class="l"><h2>Страна</h2>:</td>
                                     <td>{% for country in object.countries.all %}
-                                        {{ country }}{% endfor %}
+                                        {{ country }}{% if not forloop.last %}, {% endif %}{% endfor %}
                                     </td>
                                 </tr>
                                 <tr>
@@ -72,7 +72,7 @@
                                 <tr>
                                     <td class="l"><h2>Жанр</h2>:</td>
                                     <td>{% for genre in object.genres.all %}
-                                        <span itemprop="genre"> {{ genre }}</span>{% endfor %}
+                                        <span itemprop="genre"> {{ genre }}</span>{% if not forloop.last %}, {% endif %}{% endfor %}
                                 </tr>
                                 <tr>
                                     <td class="l"><h2>Время</h2>:</td>
@@ -99,9 +99,9 @@
                                                 class="l inline"><h2>В ролях актеры</h2>: </span>
                                             {% for actor in object.actors.all %}
                                                 <span class="item"><span
-                                                        itemprop="name">{{ actor }}</span>,</span>
+                                                        itemprop="name">{{ actor }}</span>{% if not forloop.last %}, {% endif %}</span>
                                             {% endfor %}
-                                            <span class="item">и другие</span></div>
+                                            <span class="item"> и другие</span></div>
                                     {% endspaceless %}
                                     </td>
                                 </tr>
