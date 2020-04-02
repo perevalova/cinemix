@@ -102,6 +102,10 @@
 						<p>Genre: {% for genre in movie.genres.all %} {{ genre }}{% endfor %}</p>
 					</div>
 				</div>
+                {% empty %}
+                    <div>
+                        <h3>Nothing found</h3>
+                    </div>
                 {% endfor %}
 				<div class="">
                 {% include 'pagination.html' %}
