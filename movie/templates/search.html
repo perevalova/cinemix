@@ -29,11 +29,15 @@
 						<p class="rate"><i class="ion-android-star"></i><span>{{ movie.rating }}</span> /10</p>
 						<p class="describe">{{ movie.plot|truncatewords:50 }}</p>
 						<p class="run-time"> Run Time: {{ movie.runtime }} m.</p>
-						<p>Country: {% for country in movie.countries.all %} {{ country }}{% endfor %}</p>
+						<p>Country: {% for country in movie.countries.all %} {{ country }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
 						<p>Release: {{ movie.year }}</p>
-						<p>Genre: {% for genre in movie.genres.all %} {{ genre }}{% endfor %}</p>
+						<p>Genre: {% for genre in movie.genres.all %} {{ genre }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
 					</div>
 				</div>
+                {% empty %}
+                    <div>
+                        <h3>Nothing found</h3>
+                    </div>
                 {% endfor %}
                 {% include 'pagination.html' %}
             </div>

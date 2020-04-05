@@ -111,14 +111,18 @@
                             /10</p>
 						<p class="describe">{{ movie.plot|truncatewords:20 }}</p>
 						<p class="run-time"> Run Time: {{ movie.runtime }} m.</p>
-						<p>Country: {% for country in movie.countries.all %} {{ country }}{% endfor %}</p>
+						<p>Country: {% for country in movie.countries.all %} {{ country }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
 						<p>Rating: <span>IMDb: <span
                                         class="bold">{{ movie.imdb }}</span></span>,
                                     <span>Кинопоиск: <span
                                             class="bold">{{ movie.kinopoisk }}</span></span></p>
-						<p>Genre: {% for genre in movie.genres.all %} {{ genre }}{% endfor %}</p>
+						<p>Genre: {% for genre in movie.genres.all %} {{ genre }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
 					</div>
 				</div>
+                {% empty %}
+                    <div>
+                        <h3>Nothing found</h3>
+                    </div>
                 {% endfor %}
 				<div class="">
                 {% include 'pagination.html' %}
