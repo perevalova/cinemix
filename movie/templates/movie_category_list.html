@@ -68,6 +68,10 @@
 										</div>
 									</div>
 								</div>
+								<div class="col-md-12 form-it">
+                                    <input type="checkbox" name="watched" value="n">
+                                    <span id="watched">Not watched</span>
+								</div>
 								<div class="col-md-12 ">
 									<input class="submit" type="submit" value="submit">
 								</div>
@@ -82,8 +86,8 @@
 					<p>Found <span>{{ movie_amount }}</span> in total</p>
 					<label>Sort by:</label>
                     <span>
-                        <a href="{% url 'movie:list_category' view.kwargs.type view.kwargs.category %}?page={{ movies.number }}&amp;order_by=newest">Новее</a> |
-                        <a href="{% url 'movie:list_category' view.kwargs.type view.kwargs.category %}?page={{ movies.number }}&amp;order_by=oldest">Старее</a>
+                        <a href="{% url 'movie:list_category' view.kwargs.type view.kwargs.category %}?page={{ movies.number }}&amp;{% if request.GET.genres %}genres={{ request.GET.genres }}&amp;{% endif %}{% if request.GET.rating %}rating={{ request.GET.rating }}&amp;{% endif %}{% if request.GET.year_from %}year_from={{ request.GET.year_from }}&amp;{% endif %}{% if request.GET.year_to %}year_to={{ request.GET.year_to }}&amp;{% endif %}{% if watched %}watched={{ watched }}&amp;{% endif %}order_by=newest">Новее</a> |
+                        <a href="{% url 'movie:list_category' view.kwargs.type view.kwargs.category %}?page={{ movies.number }}&amp;{% if request.GET.genres %}genres={{ request.GET.genres }}&amp;{% endif %}{% if request.GET.rating %}rating={{ request.GET.rating }}&amp;{% endif %}{% if request.GET.year_from %}year_from={{ request.GET.year_from }}&amp;{% endif %}{% if request.GET.year_to %}year_to={{ request.GET.year_to }}&amp;{% endif %}{% if watched %}watched={{ watched }}&amp;{% endif %}order_by=oldest">Старее</a>
                     </span>
 				</div>
                 {% for movie in movies %}

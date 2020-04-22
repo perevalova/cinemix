@@ -1,21 +1,21 @@
 {% if is_paginated %}
-    {% with order_by=request.GET.order_by q=request.GET.q %}
+    {% with order_by=request.GET.order_by q=request.GET.q genres=request.GET.genres rating=request.GET.rating year_from=request.GET.year_from year_to=request.GET.year_to watched=request.GET.watched %}
         <nav class="pagination2">
             <ul class="pagination">
                 <li>
-                    <a href="?page=1{% if q %}&amp;q={{ q }}{% endif %}{% if order_by %}&amp;order_by={{ order_by }}{% endif %}"
+                    <a href="?page=1{% if q %}&amp;q={{ q }}{% endif %}{% if genres %}&amp;genres={{ genres }}{% endif %}{% if rating %}&amp;rating={{ rating }}{% endif %}{% if year_from %}&amp;year_from={{ year_from }}{% endif %}{% if year_to %}&amp;year_to={{ year_to }}{% endif %}{% if watched %}&amp;watched={{ watched }}{% endif %}{% if order_by %}&amp;order_by={{ order_by }}{% endif %}"
                        class="pagin">&laquo;</a>
                 </li>
                 {% for p in movies.paginator.page_range %}
                     {% if p <= movies.number|add:4 and p >= movies.number|add:-5 %}
                         <li {% if movies.number == p %}class="active"{% endif %}>
-                            <a href="?page={{ p }}{% if q %}&amp;q={{ q }}{% endif %}{% if order_by %}&amp;order_by={{ order_by }}{% endif %}"
+                            <a href="?page={{ p }}{% if q %}&amp;q={{ q }}{% endif %}{% if genres %}&amp;genres={{ genres }}{% endif %}{% if rating %}&amp;rating={{ rating }}{% endif %}{% if year_from %}&amp;year_from={{ year_from }}{% endif %}{% if year_to %}&amp;year_to={{ year_to }}{% endif %}{% if watched %}&amp;watched={{ watched }}{% endif %}{% if order_by %}&amp;order_by={{ order_by }}{% endif %}"
                            class="pagin">{{ p }}</a>
                         </li>
                     {% endif %}
                 {% endfor %}
                 <li>
-                    <a href="?page={{ movies.paginator.num_pages }}{% if q %}&amp;q={{ q }}{% endif %}{% if order_by %}&amp;order_by={{ order_by }}{% endif %}"
+                    <a href="?page={{ movies.paginator.num_pages }}{% if q %}&amp;q={{ q }}{% endif %}{% if genres %}&amp;genres={{ genres }}{% endif %}{% if rating %}&amp;rating={{ rating }}{% endif %}{% if year_from %}&amp;year_from={{ year_from }}{% endif %}{% if year_to %}&amp;year_to={{ year_to }}{% endif %}{% if watched %}&amp;watched={{ watched }}{% endif %}{% if order_by %}&amp;order_by={{ order_by }}{% endif %}"
                        class="pagin">
                         &raquo;</a>
                 </li>

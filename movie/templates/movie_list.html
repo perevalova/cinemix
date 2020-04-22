@@ -81,6 +81,10 @@
 {#										</div>#}
 									</div>
 								</div>
+								<div class="col-md-12 form-it">
+                                    <input type="checkbox" name="watched" value="n">
+                                    <span id="watched">Not watched</span>
+								</div>
 								<div class="col-md-12 ">
 									<input class="submit" type="submit" value="submit">
 								</div>
@@ -95,8 +99,9 @@
 					<p>Found <span>{{ movie_amount }}</span> in total</p>
 					<label>Sort by:</label>
                     <span>
-                        <a href="{% url 'movie:list' view.kwargs.type %}?page={{ movies.number }}&amp;order_by=newest">Новее</a> |
-                        <a href="{% url 'movie:list' view.kwargs.type %}?page={{ movies.number }}&amp;order_by=oldest">Старее</a>
+                        <a href="{% url 'movie:list' view.kwargs.type %}?page={{ movies.number }}&amp;{% if request.GET.genres %}genres={{ request.GET.genres }}&amp;{% endif %}{% if request.GET.rating %}rating={{ request.GET.rating }}&amp;{% endif %}{% if request.GET.year_from %}year_from={{ request.GET.year_from }}&amp;{% endif %}{% if request.GET.year_to %}year_to={{ request.GET.year_to }}&amp;{% endif %}{% if watched %}watched={{ watched }}&amp;{% endif %}order_by=rating">По рейтингу</a> |
+                        <a href="{% url 'movie:list' view.kwargs.type %}?page={{ movies.number }}&amp;{% if request.GET.genres %}genres={{ request.GET.genres }}&amp;{% endif %}{% if request.GET.rating %}rating={{ request.GET.rating }}&amp;{% endif %}{% if request.GET.year_from %}year_from={{ request.GET.year_from }}&amp;{% endif %}{% if request.GET.year_to %}year_to={{ request.GET.year_to }}&amp;{% endif %}{% if watched %}watched={{ watched }}&amp;{% endif %}order_by=newest">Новее</a> |
+                        <a href="{% url 'movie:list' view.kwargs.type %}?page={{ movies.number }}&amp;{% if request.GET.genres %}genres={{ request.GET.genres }}&amp;{% endif %}{% if request.GET.rating %}rating={{ request.GET.rating }}&amp;{% endif %}{% if request.GET.year_from %}year_from={{ request.GET.year_from }}&amp;{% endif %}{% if request.GET.year_to %}year_to={{ request.GET.year_to }}&amp;{% endif %}{% if watched %}watched={{ watched }}&amp;{% endif %}order_by=oldest">Старее</a>
                     </span>
 {#					<a href="movie_list.html" class="list"><i class="ion-ios-list-outline active"></i></a>#}
 {#					<a  href="movie_grid.html" class="grid"><i class="ion-grid"></i></a>#}

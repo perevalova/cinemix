@@ -22,6 +22,11 @@ def filtering(request, object_list):
     if rating:
         object_list = object_list.filter(rating__gte=rating)
 
+    # if film not watched
+    watched = request.GET.get('watched', '')
+    if watched:
+        object_list = object_list.filter(rating=0)
+
     # filtering by year
     year_from = request.GET.get('year_from', '')
     year_to = request.GET.get('year_to', '')
@@ -31,7 +36,9 @@ def filtering(request, object_list):
 
      # order Queryset
     order_by = request.GET.get('order_by', '')
-    if order_by == 'newest':
+    if order_by == 'rating':
+        object_list = object_list.order_by('-rating', '-year', 'id')
+    elif order_by == 'newest':
         object_list = object_list.order_by('-year', 'id')
     elif order_by == 'oldest':
         object_list = object_list.order_by('year', 'id')

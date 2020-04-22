@@ -209,3 +209,12 @@
     /*color: #3e6286;*/
 }
 
+.form-it input[name="watched"] {
+    height: 12px;
+}
+
+#watched {
+    font-size: 14px;
+    color: #abb7c4;
+    font-weight: bold;
+}
