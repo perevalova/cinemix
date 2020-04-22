@@ -1,6 +1,7 @@
 """for rezka.ag with BeautifulSoup with slogan/lists"""
 import sys
 from django.templatetags.static import static
+from django.db import transaction
 
 import requests
 from bs4 import BeautifulSoup as bs
@@ -32,6 +33,12 @@ def crawler(url):
         year = year.split()[0]
         slug = slugify(title + '-' + year)
         runtime = soup.find('td', attrs={'itemprop': 'duration'}).get_text().split()[0]
+        if ':' in runtime:
+            runtime = soup.find('td', attrs={'itemprop': 'duration'}).get_text().split(':')
+            hours = runtime[0].lstrip('0')
+            minutes = '0' if runtime[1] == '00' else runtime[1].lstrip('0')
+            # minutes = runtime[1].lstrip('0')
+            runtime = int(hours) * 60 + int(minutes)
         director = soup.find('span', attrs={'itemprop': 'director'}).find('span').get_text()
         categories = soup.find_all('span', attrs={'itemprop': 'genre'})[0].get_text()
         categories_slug = url.split('/')[4]
@@ -50,7 +57,8 @@ def crawler(url):
             actors.append(actor.get_text())
 
         try:
-            img_resp = requests.get('https://rezka.ag' + image)
+            # img_resp = requests.get('https://rezka.ag' + image)
+            img_resp = requests.get(image)
 
             image_name = 'img/' + slug + image[-4:]
 
@@ -75,37 +83,39 @@ def crawler(url):
             'imdb': imdb,
             'kinopoisk': kinopoisk,
         }
-        try:
-            stuff = Movie.objects.create(**movie)
-        except Exception as e:
-            print(type(e), e)
-            return
 
-        for genre in genres:
-            genre, created = Genre.objects.get_or_create(title=genre, slug=slugify(genre))
-            stuff.genres.add(genre)
+        with transaction.atomic():
+            try:
+                stuff = Movie.objects.create(**movie)
+            except Exception as e:
+                print(type(e), e)
+                return
 
-        for country in countries:
-            country, created = Country.objects.get_or_create(title=country, slug=slugify(country))
-            stuff.countries.add(country)
+            for genre in genres:
+                genre, created = Genre.objects.get_or_create(title=genre, slug=slugify(genre))
+                stuff.genres.add(genre)
 
-        for actor in actors:
-            actor, created = Actor.objects.get_or_create(name=actor, slug=slugify(actor))
-            stuff.actors.add(actor)
+            for country in countries:
+                country, created = Country.objects.get_or_create(title=country, slug=slugify(country))
+                stuff.countries.add(country)
 
-        category = {'title': categories, 'slug': slugify(categories_slug)}
-        category, created = Category.objects.get_or_create(**category)
-        stuff.categories.add(category)
+            for actor in actors:
+                actor, created = Actor.objects.get_or_create(name=actor, slug=slugify(actor))
+                stuff.actors.add(actor)
 
-        create_type = {'title': movie_type.title(), 'slug': slugify(movie_type)}
-        create_type, created = MovieType.objects.get_or_create(**create_type)
-        stuff.type = create_type
-        stuff.save()
+            category = {'title': categories, 'slug': slugify(categories_slug)}
+            category, created = Category.objects.get_or_create(**category)
+            stuff.categories.add(category)
 
-        director = {'name': director, 'slug': slugify(director)}
-        director, created = Director.objects.get_or_create(**director)
-        stuff.director = director
-        stuff.save()
+            create_type = {'title': movie_type.title(), 'slug': slugify(movie_type)}
+            create_type, created = MovieType.objects.get_or_create(**create_type)
+            stuff.type = create_type
+            stuff.save()
+
+            director = {'name': director, 'slug': slugify(director)}
+            director, created = Director.objects.get_or_create(**director)
+            stuff.director = director
+            stuff.save()
 
         print('Success:', url)
 
