@@ -22,6 +22,8 @@ def crawler(url):
 
         title = soup.find('h1', attrs={'itemprop': 'name'}).get_text()
         movie_type = url.split('/')[3]
+        if movie_type == 'series':
+            movie_type = 'serials'
         image = soup.find('img', attrs={'itemprop': 'image'})['src']
         plot = soup.find('div', attrs={'class': 'b-post__description_text'}).get_text().lstrip()
         rating = soup.find_all('span', attrs={'class': 'bold'})
