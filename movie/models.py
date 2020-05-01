@@ -126,6 +126,9 @@ class Collection(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('movie:collection', args=[self.slug])
+
 
 class Parser(models.Model):
     COMMAND_CHOICES = [(i, f'{i}') for i in range(1, 6)]
