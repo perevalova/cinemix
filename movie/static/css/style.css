@@ -4341,7 +4341,7 @@ ul {
 }
 @media (max-width: 767px) {
   .movie-item-style-2 .mv-item-infor {
-    max-width: 180px;
+    /*max-width: 180px;*/
     margin: 0 auto;
   }
 }
@@ -7812,7 +7812,7 @@ header#headerv3-light {
 }
 @media (max-width: 767px) {
   .top-search {
-    display: none !important;
+    /*display: none !important;*/
   }
   header .navbar-default {
     padding: 10px 0;

@@ -132,13 +132,13 @@
 }
 
 .random-object-1 {
-    display: flex;
+    /*display: flex;*/
     align-items: center;
     justify-content: center;
 }
 
 .random-object-2 {
-    margin-left: 80px;
+    /*margin-left: 80px;*/
 }
 
 
